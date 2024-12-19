@@ -1,3 +1,22 @@
+<?php
+
+//Crear usuario
+
+// Eliminar usuario
+
+// modificar usuario modify 
+
+
+
+
+//Mostrare usuario
+
+
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>

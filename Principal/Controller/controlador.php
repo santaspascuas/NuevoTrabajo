@@ -48,10 +48,11 @@ class Controlador{
                     'rol' => $consulta['ROL']
                 ];
     
-                echo "Inicio de sesión correcto. Bienvenido, " . $consulta['nick'];
+                //echo "Inicio de sesión correcto. Bienvenido, " . $consulta['nick'];
     
                 // Redirigir al home
-                header("Location:../Views/index.php");
+                //header("Location:../Views/index.php");
+                Vista::muestraHome();
                 exit; // Asegurar que no se ejecute más código
             } else {
                 echo "Contraseña incorrecta.";
@@ -161,6 +162,23 @@ class Controlador{
     }
 
 
+    /// Tabla de Administrador
+
+    public function ctrUsuario(){
+
+        // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
+         $tabla = "usuario";
+
+         $respuesta = Usuariodb::ctrUsuario($tabla);
+
+
+
+
+
+
+    }
+
+
 
     
 
@@ -255,7 +273,6 @@ $aplicacion = new Controlador();
 // Si hay una sesión activa, ajustamos la vista inicial a la home.
 // Asi tendremos controlado po defecto lo que vea. 
 if (isset($_SESSION['usuarioLogueado'])) {
-    echo " Hay una session iniciada";
     print_r($_SESSION['usuarioLogueado']);
 }
 
@@ -303,6 +320,14 @@ if(isset($_POST['tmp_registro_btn_registro'])){
     
     $aplicacion->registro();
 }
+
+
+
+
+
+
+
+/// Tipo de botones para activar la administracion
 
 
 
