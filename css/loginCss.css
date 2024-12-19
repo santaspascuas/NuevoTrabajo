@@ -1,0 +1,37 @@
+body {
+    font-family: 'Varela Round', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h2 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.form-control:focus {
+    border-color: #6c63ff;
+    box-shadow: 0 0 0 0.2rem rgba(108, 99, 255, 0.25);
+}
+
+.submitBtn {
+    border-radius: 1rem;
+    background-color: #6c63ff;
+    border-color: #6c63ff;
+}
+
+.submitBtn:hover {
+    background-color: #5753d9;
+    border-color: #5753d9;
+}
