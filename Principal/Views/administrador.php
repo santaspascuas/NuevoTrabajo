@@ -2,7 +2,7 @@
 
 //Hago una llamada estatica a mi consulta para obtener todos los datos y poder gestionarlos. 
 $consulta = Controlador::ctrUsuario();
-print_r ($consulta);
+//print_r ($consulta);
 
 
 
@@ -30,7 +30,7 @@ AHORA BIEN AL OBTENER CON FECTH ALL TODO. SI QUE PUEDES IBTENER LOS VALORES ENTE
 
 
 echo "<pre>";
-print_r($consulta);
+//print_r($consulta);
 echo "</pre>";
 
 
@@ -59,88 +59,91 @@ echo "</pre>";
 
 
 ?>
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administración de Usuarios y Juegos</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f4f4f4;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .btn {
-            border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .btn-confirm {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .btn-delete {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .btn-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            margin: 0 5px;
-            font-size: 1.5em;
-        }
-
-        .btn-add {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .btn-remove {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .controls {
-            margin: 10px 0;
-            display: flex;
-            gap: 10px;
-        }
-    </style>
+    <title>Document</title>
+    <link rel="stylesheet" href="../../css/loginCss.css">
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../../js/loginJS.js"></script>
 </head>
 <body>
     <h1>Panel de Administración</h1>
     <p>Solo accesible para cuentas con perfil de administrador.</p>
-
-    <h2>Gestión de Usuarios</h2>
     <div class="controls">
+
+    <!----- Aqui ira una especi de registro para dar de alta al usuario en la base de datos--->
+    <div class="login-container">
+        <h2><i class="fas fa-sign-in-alt"></i>Administrador</h2>
+        <form id="AdminUsers" method="post" action="../Controller/controlador.php">
+             <!-- Nick -->
+             <div class="mb-3">
+                <label for="firstName" class="form-label">Nick</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" id="firstName" name="nick" class="form-control" placeholder="Nick"
+                        required>
+                </div>
+            </div>
+
+               <!-- Email -->
+               <div class="mb-3">
+                <label for="email" class="form-label">Correo Electrónico</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="usuario@gmail.com"
+                        required pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+                        title="El correo debe ser una dirección válida de Gmail">
+                </div>
+            </div>
+                <!-- Nombre -->
+             <div class="mb-3">
+                <label for="firstName" class="form-label">Nombre</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" id="firstName" name="firstName" class="form-control" placeholder="Nombre"
+                        required>
+                </div>
+            </div>
+
+            <!-- Apellidos -->
+             <div class="mb-3">
+                <label for="lastName" class="form-label">Apellidos</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Apellidos"
+                        required>
+                </div>
+            </div>
+
+                        <!-- Contraseña -->
+                        <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input type="password" minlength="6" id="password" name="password" class="form-control" placeholder="Contraseña" required>
+                </div>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="submitBtn" name="tmp_admin_crear_usuario" value="login" >Añadir Usuario</button>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="submitBtn" name="tmp_login_btn_login" value="login" >Iniciar Sesión</button>
+            </div>
+        </form>
+
+
+
         <!-- Formulario para añadir usuarios -->
         <form method="POST" action="../Controller/controlador.php">
             <input type="hidden" name="accion" value="anadir_usuario">
