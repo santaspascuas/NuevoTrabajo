@@ -51,11 +51,12 @@
         <button type="submit" name="page" value="admin" class="nav-link btn btn-link">Admin</button>
       </li>
       -->
-      <?php if ($_SESSION['usuarioLogueado']['rol'] === 'Lider'): ?>
-        <li class="nav-item">
+      <?php if (isset($_SESSION['usuarioLogueado']['rol']) && $_SESSION['usuarioLogueado']['rol'] === 'Lider'): ?>
+    <li class="nav-item">
         <button type="submit" name="tmp_inicio_btn_entrar_Administrador" value="Administrador" class="nav-link btn btn-link">Administrador</button>
-        </li>     
+    </li>     
     <?php endif; ?>
+
 
 
 

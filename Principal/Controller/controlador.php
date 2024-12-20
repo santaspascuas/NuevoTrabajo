@@ -162,19 +162,16 @@ class Controlador{
     }
 
 
-    /// Tabla de Administrador
+    /// Tabla de Administrador con la tabla usuario.
 
-    public function ctrUsuario(){
+    public static function ctrUsuario(){
 
         // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
          $tabla = "usuario";
 
          $respuesta = Usuariodb::ctrUsuario($tabla);
 
-
-
-
-
+         return $respuesta;
 
     }
 
@@ -294,6 +291,16 @@ if (isset($_SESSION['usuarioLogueado'])) {
     if (isset($_POST['tmp_inicio_btn_entrar_Administrador'])) {
         $aplicacion->muestraAdministrador();
     }
+
+
+
+
+////-------------------TABLA ADMINISTRADOR--------------------------------------///
+
+
+if (isset($_POST['tmp_inicio_btn_entrar_registro'])) {
+    $aplicacion->muestraRegistro();
+}
 
 
 

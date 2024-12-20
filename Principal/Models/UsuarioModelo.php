@@ -140,6 +140,8 @@ class Usuariodb{
 
 
 
+
+    //-------------------------------------Administrador-------------------------------------------------//
     public static function ctrUsuario($tabla){
         // Vamos a hacer una consulta general de los usuarios.
         try{
@@ -155,8 +157,9 @@ class Usuariodb{
               // Ejecutar la consulta con el email proporcionado
               $stmt->execute();
 
-               // Obtener el resultado
-            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+               // Obtener el resultado pero de uno solo y yo quiero de varios
+               
+            $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
             // Retornar el resultado o null si no existe
             return $resultado ?: null;
 
@@ -172,6 +175,9 @@ class Usuariodb{
 
 
     }
+
+
+    
 
 
 
