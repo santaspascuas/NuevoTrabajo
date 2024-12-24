@@ -148,7 +148,6 @@ class Controlador{
                 $usuarioDB->CrearUsuario($nick,$email,$nombre,$apellidos,$pass);
                 // Crearia una session y cookie. ¿Porque cookie? Porque necesit establecer un tiempo de session o mantenimiento en el caso de que el usuario este y tiempo limitado.
                 // Dice que puedo crear una array y luego meterlo en una session. ¿ Al loguearse no deberia crear una session?
-
                 // Una vez se confirma que se ha registrado. Me manda a login para comprobar el login. ! Plus añadir envio de correo!
 
                 header("Location:../Views/login.php");
@@ -176,6 +175,15 @@ class Controlador{
     }
 
 
+    public static function admCrearUsuario(){
+
+        Vista::muestraAdministrador();
+
+        echo "Estoy aqui";
+
+    }
+
+
 
     
 
@@ -197,46 +205,27 @@ class Controlador{
     // Funciones solo para el index.
 
     public function muestraHome(){
-
         // Aqui estamos llamando al home por defecto. Empezamos los botones
-        
         Vista::muestraHome();
-
     }
 
     // Aqui va a ir la funcion del perfil
-
     public function muestraPerfil(){
-
         // Aqui estamos llamando al home por defecto. Empezamos los botones
-        
         Vista::muestraPerfil();
-
     }
-
     public function muestraLogin(){
-
         // Aqui estamos llamando al home por defecto. Empezamos los botones
-        
         Vista::muestraLogin();
-
     }
-
-
     public function muestraRegistro(){
-
         // Aqui estamos llamando al home por defecto. Empezamos los botones
-        
         Vista::muestraRegistro();
-
     }
 
     public function muestraAdministrador(){
-
         // Aqui estamos llamando al home por defecto. Empezamos los botones
-        
         Vista::muestraAdministrador();
-
     }
 
 
@@ -295,18 +284,12 @@ if (isset($_SESSION['usuarioLogueado'])) {
 
 
 
-////-------------------TABLA ADMINISTRADOR--------------------------------------///
+////-------------------Botones de Registro y Login paginas--------------------------------------///
 
 
 if (isset($_POST['tmp_inicio_btn_entrar_registro'])) {
     $aplicacion->muestraRegistro();
 }
-
-
-
-
-
-
 
 if(isset($_POST['tmp_login_btn_registro'])){
     
@@ -329,12 +312,12 @@ if(isset($_POST['tmp_registro_btn_registro'])){
 }
 
 
+////-------------------Administrador--------------------------------------///
 
-
-
-
-
-/// Tipo de botones para activar la administracion
+if(isset($_POST['tmp_admin_crear_usuario'])){
+    
+    $aplicacion->admCrearUsuario();
+}
 
 
 

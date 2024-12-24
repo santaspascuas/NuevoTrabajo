@@ -21,42 +21,11 @@ AHORA BIEN AL OBTENER CON FECTH ALL TODO. SI QUE PUEDES IBTENER LOS VALORES ENTE
 */
 
 
-
-
-
-
-
-
-
-
-echo "<pre>";
-//print_r($consulta);
-echo "</pre>";
-
-
-
-
-/// Vamos a proceder a gestionar la iteracion
-
-
-
-
-
-
-
 //Crear usuario
 
 // Eliminar usuario
 
 // modificar usuario modify 
-
-
-
-
-//Mostrare usuario
-
-
-
 
 ?>
 <!DOCTYPE html>
@@ -135,25 +104,14 @@ echo "</pre>";
             </div>
 
             <div class="d-grid">
-                <button type="submit" class="submitBtn" name="tmp_admin_crear_usuario" value="login" >Añadir Usuario</button>
+                <button type="submit" class="submitBtn" name="tmp_admin_crear_usuario" value="CrearUsuario" >Añadir Usuario</button><br>
             </div>
             <div class="d-grid">
-                <button type="submit" class="submitBtn" name="tmp_login_btn_login" value="login" >Iniciar Sesión</button>
+                <button type="submit" class="submitBtn" name="tmp_admin_eliminar_usuario" value="Eliminarusuario" >EliminarUsuario</button>
             </div>
         </form>
 
 
-
-        <!-- Formulario para añadir usuarios -->
-        <form method="POST" action="../Controller/controlador.php">
-            <input type="hidden" name="accion" value="anadir_usuario">
-            <button type="submit" class="btn-icon btn-add" name="tmp_admin_anadir_usuario">+</button>
-        </form>
-        <!-- Formulario para eliminar todos los usuarios -->
-        <form method="POST" action="controlador.php">
-            <input type="hidden" name="accion" value="eliminar_todos_usuarios">
-            <button type="submit" class="btn-icon btn-remove">🗑</button>
-        </form>
     </div>
     <table>
         <thead>
