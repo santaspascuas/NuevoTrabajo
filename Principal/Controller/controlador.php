@@ -177,9 +177,69 @@ class Controlador{
 
     public static function admCrearUsuario(){
 
-        Vista::muestraAdministrador();
 
-        echo "Estoy aqui";
+        // Debo de recoger los datos
+
+        if(!empty($_POST['email'])){
+            $email = $_POST['email'];
+            if(!FILTER_VAR($email, FILTER_VALIDATE_EMAIL)){
+            echo "El email introducido no es valido";
+            }
+        }
+
+
+
+        if(!empty($_POST['nick'])){
+            $nick = $_POST['nick'];
+            $nick = trim($nick);
+        }
+
+
+        if(!empty($_POST['password'])){
+            $pass = $_POST['password'];
+            if (preg_match("/^[a-zA-Z]{1,12}$/", $pass)){
+                echo "Tu contraseña no es valida";
+            }
+        }
+
+
+        if(!empty($_POST['firstName'])){
+            $nombre = $_POST['firstName'];
+            $nombre = trim($nombre);
+            }
+
+        if(!empty($_POST['lastName'])){
+            $apellidos = $_POST['lastName'];
+            $apellidos = trim($apellidos);
+        }
+
+                   // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
+                   $tabla = "usuario";
+
+        if(!empty($email)){
+            // Llamamos a la función de comprobar email que a su vez esta usando la funcion de comprobar desde usuario d
+            $respuesta = Usuariodb::ConsultarporEmail($tabla,$email);
+
+            
+            if($respuesta){
+                echo "El email ya esta registrado";
+                //Te manda mensaje y deberia de hacer algo diferente
+            }else{
+                echo "El email no esta registrado. Puedes crear el usuario";
+
+                // No me haria falta crear un objeto nuevo de usuario.
+                $usuarioDB=new Usuariodb();
+                $usuarioDB->CrearUsuario($nick,$email,$nombre,$apellidos,$pass);
+                // Crearia una session y cookie. ¿Porque cookie? Porque necesit establecer un tiempo de session o mantenimiento en el caso de que el usuario este y tiempo limitado.
+                // Dice que puedo crear una array y luego meterlo en una session. ¿ Al loguearse no deberia crear una session?
+                // Una vez se confirma que se ha registrado. Me manda a login para comprobar el login. ! Plus añadir envio de correo!
+
+            }
+
+             }
+
+
+        Vista::muestraAdministrador();
 
     }
 
