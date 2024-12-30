@@ -161,7 +161,7 @@ class Controlador{
     }
 
 
-    /// Tabla de Administrador con la tabla usuario.
+    /// Tabla de Administrador con la tabla usuario//////
 
     public static function ctrUsuario(){
 
@@ -173,7 +173,6 @@ class Controlador{
          return $respuesta;
 
     }
-
 
     public static function admCrearUsuario(){
 
@@ -237,21 +236,138 @@ class Controlador{
             }
 
              }
-
-
         Vista::muestraAdministrador();
-
     }
 
 
 
-    
 
 
 
 
+    ///--------------pagina de update-------------------------------------------------------------
+    public static function muestraUpdate(){
+        // Tengo que verificar si recibo id y poner todos los datos.
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+
+            echo $id;
+             // Obtener los datos del usuario
+             $datosUsuario = self::ctrId($id);
+             //print_r ($datosUsuario);
+
+             if ($datosUsuario) {
+                // Pasar los datos a la vista
+                include "..\Views\update.php"; // Ahora `update.php` puede usar $datosUsuario directamente.
+            } else {
+                echo "No se encontró información para el usuario solicitado.";
+            }
+        }else{
+
+            echo "No he recibido datos del id valido";
+        }
+            Vista::muestraUpdate();
+    }
+
+    // Aqui estamos usando esto para printear con el id
+
+    public static function ctrid($id){
+
+        // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
+         $tabla = "usuario";
+         return Usuariodb::ctrid($tabla,$id);
+    }
 
 
+    public static function muestraActualizacionUser(){
+
+        // Aqui iriamos a administrador. Vamos a hacer pruebas primero.
+        /// Aqui empezaria a recibir cosas de mi primer formulario de actualizacion.
+        /// Una vez recibo los valores. Deberia hacer la query en la cual actualice todo.
+
+        if (isset($_POST['nick']) && !empty($_POST['nick'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $nick = $_POST['nick'];
+        }
+
+        if (isset($_POST['id']) && !empty($_POST['id'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $id = $_POST['id'];
+        }
+        if (isset($_POST['email']) && !empty($_POST['email'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $email = $_POST['email'];
+        }
+        if (isset($_POST['nombre']) && !empty($_POST['nombre'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $nombre = $_POST['nombre'];
+        }
+        if (isset($_POST['apellidos']) && !empty($_POST['apellidos'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $apellidos = $_POST['apellidos'];
+        }
+        if (isset($_POST['password']) && !empty($_POST['password'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $pass = $_POST['password'];
+        }
+        if (isset($_POST['rol']) && !empty($_POST['rol'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $rol = $_POST['rol'];
+        }
+
+
+        // Deberiamos tener algo que lo confirme
+
+        $peticion = Usuariodb::adminActualizarUsers($nick,$email,$nombre,$apellidos,$pass,$rol,$id);
+
+        if($peticion){
+            // Como ha salido bien. Deberia ir directo a la vista de administrador.
+
+            Vista::muestraAdministrador();
+            exit; // Asegurar que no se ejecute más código
+
+        }else{
+
+        }
+
+    }
+
+    public function muestraEliminado(){
+        // Como ya tengo la información en el formuario. Unicamente activo el boton y recibo el id.
+        // Con este id lo que vamos a hacer es realizar un delete.
+        if (isset($_POST['id']) && !empty($_POST['id'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $id = $_POST['id'];
+
+            $consulta = Usuariodb::adminEliminarUsers($id);
+
+
+            if($consulta){
+                // Como ha salido bien. Deberia ir directo a la vista de administrador y veria la eliminación del usuario.
+                Vista::muestraAdministrador();
+                exit; // Asegurar que no se ejecute más código
+            }
+        }
+
+
+    }
+
+
+///--------------pagina relacionada con los juegos. Carga en la base de datos-------------------------------------------------------------
+
+    public function muestraPaginaJuegos(){
+
+        Vista::muestraCargaJuegos();
+
+        if (isset($_POST['tituloJuego']) && !empty($_POST['tituloJuego'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $titulo = $_POST['tituloJuego'];
+            echo $titulo;
+        }
+
+
+
+    }
 
 
 
@@ -285,21 +401,10 @@ class Controlador{
 
     public function muestraAdministrador(){
         // Aqui estamos llamando al home por defecto. Empezamos los botones
+
         Vista::muestraAdministrador();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
     }
 
@@ -311,6 +416,7 @@ class Controlador{
 
 // Empiezo a crear el objeto y lo invoco
 $aplicacion = new Controlador();
+
 
 // Creamos una variable de inicio que sera la de por defecto tenerla.
 // Esta forma supone tener una variable fija la cual se va a analizar con un switch
@@ -380,7 +486,48 @@ if(isset($_POST['tmp_admin_crear_usuario'])){
 }
 
 
+if(isset($_POST['tmp_admin_eliminar_usuario'])){
+    $aplicacion ->eliminarUsuario();
+}
 
+if(isset($_GET['id'])){
+    $aplicacion ->muestraUpdate();
+}
+
+
+///------------------UPDATE---------------------------------------------///
+
+
+
+// Recibiria el voton eh iria a administrador. Aqui sera mostrar administrador y hacer un update
+
+
+if(isset($_POST['tmp_update_actualizar_user'])){
+
+    $aplicacion ->muestraActualizacionUser();
+}
+
+if(isset($_POST['tmp_update_eliminar_user'])){
+
+    $aplicacion ->muestraEliminado();
+}
+
+
+////------------------------VisualizarJuegos y carga----------------------------------------///
+
+if(isset($_POST['tmp_admin_crearJuegos'])){
+
+    $aplicacion ->muestraPaginaJuegos();
+}
+
+// Viene de Administrador y nos lleva a la pagina de ejemplo Api.
+if(isset($_POST['tmp_admin_crearJuegos'])){
+    $aplicacion ->muestraPaginaJuegos();
+}
+
+if(isset($_POST['tmp_admin_crearJuegos_apiEjemplo'])){
+    $aplicacion ->muestraPaginaJuegos();
+}
 
 
 

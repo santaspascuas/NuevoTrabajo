@@ -35,6 +35,7 @@ body {
   background-color: #5753d9;
   border-color: #5753d9;
 }
+
 /* Estilo de la tabla */
 table {
   width: 90%;
@@ -63,4 +64,20 @@ tbody tr:nth-child(even) {
 
 tbody tr:hover {
   background-color: #f1f1f1;
+}
+.users-table--edit {
+  background-color: #5753d9; /* Color de fondo del botón */
+  padding: 10px 15px; /* Tamaño del botón */
+  color: #f1f1f1; /* Color del texto */
+  text-align: center; /* Centrar texto */
+  font-weight: bold; /* Texto en negrita */
+  text-decoration: none; /* Quitar subrayado */
+  border-radius: 5px; /* Bordes redondeados */
+  display: inline-block; /* Asegura que el enlace se vea como botón */
+  cursor: pointer; /* Cambia el puntero a una mano */
+  transition: background-color 0.3s; /* Animación de color */
+}
+
+.users-table--edit:hover {
+  background-color: #4340c0; /* Color del botón al pasar el ratón */
 }

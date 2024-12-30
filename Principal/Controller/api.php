@@ -36,10 +36,8 @@ class MiAPI {
 	public function getJuegoDatos($ids) {
 		$url = 'https://api.mobygames.com/v1/games'.$this->apikey;
 		// Si el array está vacío no hacemos nada
-		if (count($ids) != 0) {
-			foreach ($ids as $id) {
-			$url .= '&id='.$id;
-			}
+		if (!empty($ids)) {
+			$url .= '&id=' . implode('&id=', $ids);
 		}
 		curl_setopt($this->c,CURLOPT_URL,$url);
 		return (curl_exec($this->c));

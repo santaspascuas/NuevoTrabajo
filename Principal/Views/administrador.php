@@ -1,5 +1,5 @@
 <?php
-
+require_once "api.php";
 //Hago una llamada estatica a mi consulta para obtener todos los datos y poder gestionarlos. 
 $consulta = Controlador::ctrUsuario();
 //print_r ($consulta);
@@ -27,6 +27,13 @@ AHORA BIEN AL OBTENER CON FECTH ALL TODO. SI QUE PUEDES IBTENER LOS VALORES ENTE
 
 // modificar usuario modify 
 
+
+
+
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -48,7 +55,6 @@ AHORA BIEN AL OBTENER CON FECTH ALL TODO. SI QUE PUEDES IBTENER LOS VALORES ENTE
 <body>
     <h1>Panel de Administración</h1>
     <p>Solo accesible para cuentas con perfil de administrador.</p>
-    <div class="controls">
 
     <!----- Aqui ira una especi de registro para dar de alta al usuario en la base de datos--->
     <div class="login-container">
@@ -106,10 +112,10 @@ AHORA BIEN AL OBTENER CON FECTH ALL TODO. SI QUE PUEDES IBTENER LOS VALORES ENTE
             <div class="d-grid">
                 <button type="submit" class="submitBtn" name="tmp_admin_crear_usuario" value="CrearUsuario" >Añadir Usuario</button><br>
             </div>
-            <div class="d-grid">
-                <button type="submit" class="submitBtn" name="tmp_admin_eliminar_usuario" value="Eliminarusuario" >EliminarUsuario</button>
-            </div>
         </form>
+
+
+
 
 
     </div>
@@ -123,6 +129,8 @@ AHORA BIEN AL OBTENER CON FECTH ALL TODO. SI QUE PUEDES IBTENER LOS VALORES ENTE
                 <th>Apellidos</th>
                 <th>Password</th>
                 <th>Rol</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody id="usuarios">
@@ -136,25 +144,23 @@ AHORA BIEN AL OBTENER CON FECTH ALL TODO. SI QUE PUEDES IBTENER LOS VALORES ENTE
             <td><?= htmlspecialchars($usuario['nombre']) ?></td>
             <td><?= htmlspecialchars($usuario['apellidos']) ?></td>
             <td><?= htmlspecialchars($usuario['password']) ?></td>
-            <td><?= htmlspecialchars($usuario['ROL']) ?></td>    
+            <td><?= htmlspecialchars($usuario['ROL']) ?></td>
+            <!-- Estamos pasando el id por parametro GET a la vista para procesar luego como editar -->
+            <td><a href=?id=<?= htmlspecialchars($usuario['id']) ?> class="users-table--edit">Editar</td>
+            <td><a href=?id=<?= htmlspecialchars($usuario['id']) ?> class="users-table--edit">Eliminar</td>  
             </tr>
             <?php endforeach; ?>    
         </tbody>
     </table>
+    <!-- Los datos de usuarios se generarán dinámicamente desde el backend -->
 
     <h2>Gestión de Juegos</h2>
     <div class="controls">
-        <!-- Formulario para añadir juegos -->
-        <form method="POST" action="controlador.php">
-            <input type="hidden" name="accion" value="anadir_juego">
-            <button type="submit" class="btn-icon btn-add">+</button>
-        </form>
-        <!-- Formulario para eliminar todos los juegos -->
-        <form method="POST" action="controlador.php">
-            <input type="hidden" name="accion" value="eliminar_todos_juegos">
-            <button type="submit" class="btn-icon btn-remove">🗑</button>
-        </form>
     </div>
+    <form id="formulario" method="post" action="../Controller/controlador.php">
+        <button type="submit" class="submitBtn" name="tmp_admin_crearJuegos" value="CrearJuegos" >Añadir Juegos</button><br>
+    </form>
+
     <table>
         <thead>
             <tr>
@@ -168,5 +174,6 @@ AHORA BIEN AL OBTENER CON FECTH ALL TODO. SI QUE PUEDES IBTENER LOS VALORES ENTE
             <!-- Los datos de juegos se generarán dinámicamente desde el backend -->
         </tbody>
     </table>
+
 </body>
 </html>
