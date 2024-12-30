@@ -47,7 +47,14 @@ class Vista{
 
 
 
-
+    public static function muestraCarrito(){
+        if (isset($_SESSION['carrito'])){
+            $juegos=unserialize($_SESSION['carrito']);
+        }else{
+            $juegos=[];
+        }
+        include_once "../Views/carrito.php";
+    }
 
 
 

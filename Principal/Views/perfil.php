@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elegant User Profile Portal</title>
+    <title>Profile Portal</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;

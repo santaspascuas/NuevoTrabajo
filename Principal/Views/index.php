@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
@@ -31,55 +30,70 @@
                 Menu
                 <i class="fas fa-bars"></i>
             </button>
+            <!-- Aqui cada input enviara una señal al controlador-->
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <!-- Aqui cada input enviara una señal al controlador-->
-                        <div class="collapse navbar-collapse" id="navbarResponsive">
-                            <form action="../Controller/controlador.php" method="post" class="d-flex w-100">
-                                <ul class="navbar-nav ms-auto">
-                                    <li class="nav-item">
-                                        <button type="submit" name="tmp_inicio_btn_entrar_home" value="index"
-                                            class="nav-link btn btn-link">Inicio</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button type="submit" name="tmp_inicio_btn_entrar_perfil" value="perfil"
-                                            class="nav-link btn btn-link">Perfil</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button type="submit" name="tmp_inicio_btn_entrar_catalogo" value="catalogo"
-                                            class="nav-link btn btn-link">Catalogo</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button type="submit" name="tmp_inicio_btn_entrar_login" value="login"
-                                            class="nav-link btn btn-link">Login</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button type="submit" name="tmp_inicio_btn_entrar_salir" value="salir"
-                                            class="nav-link btn btn-link">Salir</button>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button type="submit" name="tmp_inicio_btn_entrar_registro" value="registro"
-                                            class="nav-link btn btn-link">Registro</button>
-                                    </li>
-                                    <!-- Más botones se pueden agregar aquí -->
-                                    <!-- Ejemplo:
+                <form action="../Controller/controlador.php" method="post" class="d-flex w-100">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <button type="submit" name="tmp_inicio_btn_entrar_home" value="index"
+                                class="nav-link btn btn-link">Inicio</button>
+                        </li>
+
+                        <?php if (isset($_SESSION['usuarioLogueado'])): ?>
+                            <li class="nav-item">
+                                <button type="submit" name="tmp_inicio_btn_entrar_perfil" value="perfil"
+                                    class="nav-link btn btn-link">Perfil</button>
+                            </li>
+                        <?php endif; ?>
+
+                        <li class="nav-item">
+                            <button type="submit" name="tmp_inicio_btn_entrar_catalogo" value="catalogo"
+                                class="nav-link btn btn-link">Catalogo</button>
+                        </li>
+
+                        <?php if (!isset($_SESSION['usuarioLogueado'])): ?>
+                            <li class="nav-item">
+                                <button type="submit" name="tmp_inicio_btn_entrar_login" value="login"
+                                    class="nav-link btn btn-link">Login</button>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php if (isset($_SESSION['usuarioLogueado'])): ?>
+                            <li class="nav-item">
+                                <button type="submit" name="tmp_inicio_btn_entrar_salir" value="salir"
+                                    class="nav-link btn btn-link">Salir</button>
+                            </li>
+                        <?php endif; ?>
+                        <?php if (!isset($_SESSION['usuarioLogueado'])): ?>
+                            <li class="nav-item">
+                                <button type="submit" name="tmp_inicio_btn_entrar_registro" value="registro"
+                                    class="nav-link btn btn-link">Registro</button>
+                            </li>
+                        <?php endif; ?>
+
+                        <li class="nav-item">
+                            <button type="submit" name="tmp_inicio_btn_entrar_carrito" value="carrito"
+                                class="nav-link btn btn-link"><img
+                                    src="https://www.svgrepo.com/show/477419/shopping-cart-14.svg"
+                                    width="20rem"></button>
+                        </li>
+                        <!-- Más botones se pueden agregar aquí -->
+                        <!-- Ejemplo:
                                      <li class="nav-item">
                                      <button type="submit" name="page" value="admin" class="nav-link btn btn-link">Admin</button>
                                      </li>
                                      -->
-                                    <?php if (isset($_SESSION['usuarioLogueado']['rol']) && $_SESSION['usuarioLogueado']['rol'] === 'Lider'): ?>
-                                        <li class="nav-item">
-                                            <button type="submit" name="tmp_inicio_btn_entrar_Administrador"
-                                                value="Administrador" class="nav-link btn btn-link">Administrador</button>
-                                        </li>
-                                    <?php endif; ?>
+                        <?php if (isset($_SESSION['usuarioLogueado']['rol']) && $_SESSION['usuarioLogueado']['rol'] === 'Lider'): ?>
+                            <li class="nav-item">
+                                <button type="submit" name="tmp_inicio_btn_entrar_Administrador" value="Administrador"
+                                    class="nav-link btn btn-link">Administrador</button>
+                            </li>
+                        <?php endif; ?>
 
-                                </ul>
-                            </form>
-                        </div>
-                </ul>
+                    </ul>
+                </form>
             </div>
+
         </div>
         </div>
     </nav>
@@ -138,7 +152,8 @@
                 <div class="col-xl-4 col-lg-5">
                     <div class="featured-text text-center text-lg-left">
                         <h4>The Witcher 3</h4>
-                        <p class="text-black-50 mb-0">Exploración, combates intensos y una narrativa inmersiva que adapta las elecciones del jugador
+                        <p class="text-black-50 mb-0">Exploración, combates intensos y una narrativa inmersiva que
+                            adapta las elecciones del jugador
                             creando una experiencia única y profundamente emocional.</p>
                     </div>
                 </div>
@@ -153,8 +168,9 @@
                         <div class="d-flex h-100">
                             <div class="project-text w-100 my-auto text-center text-lg-left">
                                 <h4 class="text-white">Modern Warfare 3</h4>
-                                <p class="mb-0 text-white-50">Trepidante shooter en primera persona que concluye la saga épica de guerra moderna
-                                     con intensas campañas cinematográficas y frenéticas batallas multijugador.</p>
+                                <p class="mb-0 text-white-50">Trepidante shooter en primera persona que concluye la saga
+                                    épica de guerra moderna
+                                    con intensas campañas cinematográficas y frenéticas batallas multijugador.</p>
                             </div>
                         </div>
                     </div>
@@ -170,8 +186,10 @@
                         <div class="d-flex h-100">
                             <div class="project-text w-100 my-auto text-center text-lg-right">
                                 <h4 class="text-white">God of War</h4>
-                                <p class="mb-0 text-white-50"> Aventura épica de acción que sigue a Kratos, un guerrero espartano en busca de redención,
-                                     mientras enfrenta a dioses y criaturas mitológicas. Narrativa cargada de emociones y combates viscerales.</p>
+                                <p class="mb-0 text-white-50"> Aventura épica de acción que sigue a Kratos, un guerrero
+                                    espartano en busca de redención,
+                                    mientras enfrenta a dioses y criaturas mitológicas. Narrativa cargada de emociones y
+                                    combates viscerales.</p>
                             </div>
                         </div>
                     </div>

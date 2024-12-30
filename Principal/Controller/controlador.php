@@ -1,6 +1,8 @@
 <?php
 require_once "..\ViewController\Vista.php";
 require_once "..\Models\UsuarioModelo.php";
+require_once "./catalogoController.php";
+
 
 session_start();
 
@@ -239,20 +241,23 @@ class Controlador{
 
     }
 
+    public function muestraCarrito(){
 
-
-
-
-
-
-
-
-
-
-
-
+        // Aqui estamos llamando al home por defecto. Empezamos los botones
+        
+        Vista::muestraCarrito();
 
     }
+
+    public function muestraCatalogo(){
+
+        // Aqui estamos llamando al home por defecto. Empezamos los botones
+        
+       $catalogo = new CatalogoController();
+         $catalogo->listarCatalogo('');
+
+    }
+}
 
 
     
@@ -291,6 +296,50 @@ if (isset($_SESSION['usuarioLogueado'])) {
     if (isset($_POST['tmp_inicio_btn_entrar_Administrador'])) {
         $aplicacion->muestraAdministrador();
     }
+    if (isset($_POST['tmp_inicio_btn_entrar_catalogo'])) {
+        $aplicacion->muestraCatalogo();
+    }
+    if (isset($_POST['tmp_inicio_btn_entrar_carrito'])) {
+        $aplicacion->muestraCarrito();
+    }
+    if (isset($_POST['tmp_inicio_btn_entrar_salir'])) {
+        session_destroy();
+        $aplicacion->muestraHome();
+        exit();
+    }
+
+if (isset($_POST['tmp_catalogo_btn_entrar_home'])) {
+    Vista::muestraHome();
+}
+
+if (isset($_POST['tmp_catalogo_btn_anadir_carrito'])) {
+    $titulo=$_POST['title'];
+    $year=$_POST['year'];
+    $image=$_POST['image'];
+    $description=$_POST['description'];
+    $juego= new Juego($titulo,$year,$image,$description);
+
+    if (isset($_SESSION['carrito'])){
+        $carrito = unserialize($_SESSION['carrito']);
+    }else{
+        $carrito = [];
+    }
+
+    
+    $carrito[]=$juego;
+    $_SESSION['carrito']=serialize($carrito);
+    $catalogo = new CatalogoController();
+    $catalogo->listarCatalogo("");
+}
+
+
+if (isset($_POST['tmp_catalogo_btn_entrar_carrito'])) {
+    Vista::muestraCarrito();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    Vista::muestraHome();
+}
 
 
 
