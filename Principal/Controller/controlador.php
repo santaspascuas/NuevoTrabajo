@@ -450,6 +450,7 @@ if (isset($_SESSION['usuarioLogueado'])) {
 }
 
 // Control de flujo según las acciones del index.
+// cada boton al darle , carga la variable que guarda una funcion , dicha funcion como por ejemplo muestraHome() que es la que se encarga de mostrar la vista de inicio.
     if (isset($_POST['tmp_inicio_btn_entrar_registro'])) {
         $aplicacion->muestraRegistro();
     }

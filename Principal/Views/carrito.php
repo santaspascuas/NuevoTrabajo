@@ -20,6 +20,7 @@
             </form>
             <div class="search-container">
                 <form action="catalogo.php" method="post">
+                    <!-- boton para buscar los juegos por titulo -->
                     <input type="search" id="search" name="titulo" placeholder="Search Games...">
                 </form>
                 <button id="darkModeToggle" aria-label="Toggle dark mode">
@@ -28,6 +29,8 @@
             </div>
         </header>
         <main id="movieGrid">
+            <!-- iteramos sobre el foreach , por cada elemento del array se mostraria la tarjeta cde cada juego.
+            Mostramos datos como la imagen , tutulo , año etc. -->
             <?php foreach ($juegos as $juego): ?>
 
                 <div class="movie-card">

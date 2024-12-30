@@ -115,6 +115,7 @@
         </div>
 
         <!-- Catálogo de Juegos -->
+         
         <main id="movieGrid">
             <?php foreach ($juegos as $juego): ?>
                 <div class="movie-card" 
@@ -150,6 +151,7 @@
     </div>
 
     <script>
+        //mecanismo de filter basandose en genero , año y titulo.
         document.getElementById('applyFilters').addEventListener('click', () => {
             const genre = document.getElementById('genre').value.toLowerCase();
             const year = document.getElementById('year').value;

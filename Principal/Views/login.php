@@ -18,6 +18,7 @@
 </head>
 
 <body>
+    <!-- el login se compone de un div general con su form que esta gestionado por el controller y con los botones  -->
     <div class="login-container">
         <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
         <form id="loginForm" method="post" action="../Controller/controlador.php">
@@ -25,6 +26,7 @@
                 <label for="email" class="form-label">Correo Electrónico</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <!-- intentamos poner ciertas validaciones para el control de los datos que el usuario está intentando poner (required pattern) -->
                     <input type="email" id="email" name="email" class="form-control" placeholder="usuario@gmail.com"
                         required pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
                         title="El correo debe ser una dirección válida de Gmail">
