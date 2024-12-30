@@ -171,10 +171,143 @@ class Usuariodb{
         }finally{
             Conectar::cerrarConexion(); // Cerramos la conexión.
         }
+    }
 
+    //-------------------------------------Administrador/ UPDATE VISUALIZAR-------------------------------------------------//
 
+    public static function ctrid($tabla, $id) {
+        try {
+            // Conectar a la base de datos
+            $conexion = Conectar::conexion();
+    
+            // Preparar la consulta
+            $stmt = $conexion->prepare("SELECT * FROM $tabla WHERE id = :id");
+    
+            // Enlazar el parámetro de la consulta
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    
+            // Ejecutar la consulta
+            $stmt->execute();
+    
+            // Obtener el resultado (solo un registro por ID)
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            // Retornar el resultado o null si no existe
+            return $resultado ?: null;
+    
+        } catch (PDOException $e) {
+            // Manejar errores
+            error_log("Error en Consultarporid: " . $e->getMessage());
+            return null; // Opcional: podrías lanzar una excepción personalizada
+    
+        } finally {
+            // Cerrar la conexión
+            if (isset($conexion)) {
+                Conectar::cerrarConexion();
+            }
+        }
+    }
+
+///-----------------Tabla update/Actualizar datos-----------------------------------------///
+    public static function adminActualizarUsers($nick, $email, $nombre, $apellidos, $pass, $rol, $id) {
+        try {
+            // Conexión con la base de datos
+            $conexion = Conectar::conexion();
+    
+            // Preparar la consulta utilizando parámetros nombrados
+
+            /*          //Preparamos la consulta
+            $sql =("UPDATE USUARIO SET nick='$nick', email='$email', nombre='$nombre',
+            apellidos='$apellidos',password='$pass',ROL='$rol' WHERE id='$id'");*/
+
+            // Esto esta mal porque estaba inyectado valores directamente sin usar param.
+            // La funcion param hace que no pueda ser vulnerable a ataques de inyexccion sql.
+
+            $sql = "UPDATE usuario 
+                    SET nick = :nick, 
+                        email = :email, 
+                        nombre = :nombre, 
+                        apellidos = :apellidos, 
+                        password = :password, 
+                        ROL = :rol 
+                    WHERE id = :id";
+            
+            $stmt = $conexion->prepare($sql);
+    
+            // Vincular parámetros
+            $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
+            $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+            $stmt->bindParam(":nombre", $nombre, PDO::PARAM_STR);
+            $stmt->bindParam(":apellidos", $apellidos, PDO::PARAM_STR);
+            $stmt->bindParam(":password", $pass, PDO::PARAM_STR);
+            $stmt->bindParam(":rol", $rol, PDO::PARAM_STR);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    
+            // Ejecutar la consulta
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            // Manejar errores de la base de datos
+            error_log("Error al realizar la actualización del usuario: " . $e->getMessage());
+            return null; // O lanzar una excepción personalizada
+        } finally {
+            // Cerrar la conexión
+            if (isset($conexion)) {
+                Conectar::cerrarConexion();
+            }
+        }
+    }
+
+/// Query para eliminar usuarios
+
+    public static function adminEliminarUsers($id){
+
+        try{
+         // Conexión con la base de datos
+         $conexion = Conectar::conexion();
+
+         $sql = "DELETE FROM usuario 
+         WHERE id = :id";
+
+        $stmt = $conexion->prepare($sql);
+
+        // Vincular parámetros
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+        // Ejecutar la consulta y retornamos si ha sido positiva o negativa
+        if ($stmt->execute()) {
+         return true;
+     } else {
+         return false;
+     }
+
+        }catch (PDOException $e){
+            // Manejar errores de la base de datos
+            error_log("Error al realizar la actualización del usuario: " . $e->getMessage());
+            return null; // O lanzar una excepción personalizada
+        }finally {
+            // Cerrar la conexión
+            if (isset($conexion)) {
+                Conectar::cerrarConexion();
+            }
+        }
 
     }
+    
+
+
+
+
+
+
+
+
+
+
+
 
 
     

@@ -45,6 +45,16 @@ class Vista{
         include_once "../Views/administrador.php";
     }
 
+    public static function muestraUpdate(){
+        include_once "../Views/update.php";
+    }
+
+    public static function muestraCargaJuegos(){
+        include_once "../Views/EjemploApi.php";
+    }
+
+
+
 
 
     public static function muestraCarrito(){
