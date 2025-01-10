@@ -254,12 +254,6 @@
                         plataformaContainer.appendChild(document.createElement('br')); // Salto de línea
                     });    
 
-
-
-
-
-
-
                     console.log('Objeto de detalles del juego:', juegoObjeto);
                 })
                 .catch(error => {

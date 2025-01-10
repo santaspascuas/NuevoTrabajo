@@ -2,7 +2,7 @@
 //Necesitamos la clave de la api
 $apikey = 'moby_Ivjf8fphPEz3gLn9DVIcRsvNYgE';
 
-$url = 'https://api.mobygames.com/v1/games     ?format=id&title=the%20secret%20of%20monkey%20island&api_key='.$apikey;
+$url = 'https://api.mobygames.com/v1/games?format=id&title=the%20secret%20of%20monkey%20island&api_key='.$apikey;
 
 // Iniciamos la clase
 
@@ -93,20 +93,15 @@ class apiJuegos{
         return $detalles;
     }
     
-    
-
-
-
-
-
-
-
-
-
 
 }
 
 
+$ejemplo =new apiJuegos();
+
+$ejemplo ->getDatosApi();
+
+print_r($ejemplo);
 
 
 
