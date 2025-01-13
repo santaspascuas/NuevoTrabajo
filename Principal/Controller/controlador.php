@@ -520,10 +520,11 @@ if (isset($_POST['tmp_catalogo_btn_entrar_carrito'])) {
     Vista::muestraCarrito();
 }
 
+/*
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     Vista::muestraHome();
 }
-
+*/
 
 
 
