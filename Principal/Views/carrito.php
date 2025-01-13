@@ -31,17 +31,25 @@
         <main id="movieGrid">
             <!-- iteramos sobre el foreach , por cada elemento del array se mostraria la tarjeta cde cada juego.
             Mostramos datos como la imagen , tutulo , año etc. -->
-            <?php foreach ($juegos as $juego): ?>
-
-                <div class="movie-card">
-                    <img src="<?php echo $juego->getImage() ?>" alt="<?php echo $juego->getTitulo() ?>">
-                    <div class="movie-info">
-                        <h2><?php echo $juego->getTitulo() ?></h2>
-                        <p><?php echo $juego->getYear() ?></p>
-                    </div>
-                </div>
+            <?php 
                 
-            <?php endforeach ?>
+                if (isset($_COOKIE['carrito'])) {
+                    $carrito = json_decode($_COOKIE['carrito'], true);
+                
+                    foreach ($carrito as $juego) {
+                        echo "<div class='movie-card'>";
+                        echo "<img src='" . htmlspecialchars($juego['image']) . "' alt='" . htmlspecialchars($juego['title']) . "'>";
+                        echo "<div class='movie-info'>";
+                        echo "<h2>" . htmlspecialchars($juego['title']) . "</h2>";
+                        echo "<p>Año: " . htmlspecialchars($juego['year']) . "</p>";
+                        echo "</div>";
+                        echo "</div>";
+                    }
+                } else {
+                    echo "<p>El carrito está vacío.</p>";
+                }
+                
+            ?>
 
         </main>
     </div>
