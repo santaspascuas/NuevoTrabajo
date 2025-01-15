@@ -120,7 +120,7 @@
     <form id="boton"  method="post" action="../Controller/controlador.php" >
     <label for="titulo">Buscar Juego:</label>
         <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Prince of Persian">
-        <button type="submit" class="submitBtn" name="tmp_admin_crear_usuario" value="CrearUsuario" >Buscar Juego: </button><br>
+        <button type="submit" class="submitBtn" name="tmp_admin_inyectar_juego" value="InyectarJuego" >Buscar Juego: </button><br>
     </form>
 
 

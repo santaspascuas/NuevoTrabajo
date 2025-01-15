@@ -7,7 +7,7 @@
 //Revisamos la API de mobygames para saber la ruta del endpoint
 /////private $url = 'https://api.mobygames.com/v1/games';
 
-class MiAPI {
+class MiAPIEjemplo {
 	
 	// Esta variable contendrá la sesión cURL (https://www.php.net/manual/en/intro.curl.php)
 	private $c;
@@ -68,13 +68,6 @@ class MiAPI {
 		}
 
 }
-
-$api = new MiAPI();
-
-$json_juego = $api->getInfoJuego("Lemmings");
-
-print_r($json_juego);
-
 
 
 

@@ -2,6 +2,7 @@
 require_once "..\ViewController\Vista.php";
 require_once "..\Models\UsuarioModelo.php";
 require_once "./catalogoController.php";
+require_once "./api_php_javascript.php";
 
 
 session_start();
@@ -358,14 +359,34 @@ class Controlador{
 ///--------------pagina relacionada con los juegos. Carga en la base de datos-------------------------------------------------------------
 
     public function muestraPaginaJuegos(){
-
+        // Es la pagina de Juegos cargada desde el administrador.
         Vista::muestraCargaJuegos();
 
-        if (isset($_POST['tituloJuego']) && !empty($_POST['tituloJuego'])) {
+    }
+
+    public function buscarJuego(){
+        Vista::muestraCargaJuegos();
+        if (isset($_POST['titulo']) && !empty($_POST['titulo'])) {
             // Si se ha enviado el formulario de actualizacion y no esta vacio.
-            $titulo = $_POST['tituloJuego'];
+            $titulo = $_POST['titulo'];
             echo $titulo;
+            // Aqui deberia instanciar la clase de mi api.
+            // Para ello tengo que hacer un required.
+             // Instanciar la clase de la API
+                $miApi = new MiAPIEjemplo();
+             // Debo de obtener la informacion de los juegos.
+             $infoJuego = $miApi->getInfoJuego($titulo);
         }
+        // Tengo la variable infojuego con todos los juegos.
+        // Ya esta decofigicado en json. Ahora deberia conectar o poder hacer un fecth  a donde tengo la infor
+
+
+
+        
+        print_r($infoJuego);
+
+
+
 
 
 
@@ -593,18 +614,20 @@ if(isset($_POST['tmp_update_eliminar_user'])){
 
 ////------------------------VisualizarJuegos y carga----------------------------------------///
 
-if(isset($_POST['tmp_admin_crearJuegos'])){
-
-    $aplicacion ->muestraPaginaJuegos();
-}
 
 // Viene de Administrador y nos lleva a la pagina de ejemplo Api.
+
 if(isset($_POST['tmp_admin_crearJuegos'])){
+    echo "He entrado desde el administardor.";
     $aplicacion ->muestraPaginaJuegos();
 }
 
-if(isset($_POST['tmp_admin_crearJuegos_apiEjemplo'])){
-    $aplicacion ->muestraPaginaJuegos();
+// Este boton es el boton de busqueda del juego.
+
+
+if(isset($_POST['tmp_admin_inyectar_juego'])){
+    echo "Boton del juego";
+    $aplicacion ->buscarJuego();
 }
 
 
