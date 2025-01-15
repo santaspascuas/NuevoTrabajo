@@ -506,35 +506,25 @@ if (isset($_POST['tmp_catalogo_btn_entrar_home'])) {
 }
 
 if (isset($_POST['tmp_catalogo_btn_anadir_carrito'])) {
-    $titulo = $_POST['title'];
-    $year = $_POST['year'];
-    $image = $_POST['image'];
-    $description = $_POST['description'];
+    $titulo=$_POST['title'];
+    $year=$_POST['year'];
+    $image=$_POST['image'];
+    $description=$_POST['description'];
+    $juego= new Juego($titulo,$year,$image,$description);
 
-    // Crear un array para representar el juego
-    $juego = [
-        "title" => $titulo,
-        "year" => $year,
-        "image" => $image,
-        "description" => $description
-    ];
+    if (isset($_SESSION['carrito'])){
+        $carrito = unserialize($_SESSION['carrito']);
+    }else{
+        $carrito = [];
 
-    // Recuperar el carrito desde la cookie si existe
-    $carrito = [];
-    if (isset($_COOKIE['carrito'])) {
-        $carrito = json_decode($_COOKIE['carrito'], true);
     }
 
-    // Agregar el nuevo juego al carrito
-    $carrito[] = $juego;
+        $carrito[]=$juego;
+        $_SESSION['carrito']=serialize($carrito);
 
-    // Guardar el carrito actualizado en una cookie
-    setcookie('carrito', json_encode($carrito), time() + (86400 * 30), "/"); // Cookie válida por 30 días
-
-    // Continuar con la lógica del catálogo
-    $catalogo = new CatalogoController();
-    $catalogo->listarCatalogo("");
-}
+        $catalogo = new CatalogoController();
+        $catalogo->listarCatalogo("");
+    }
 
 
 if (isset($_POST['tmp_catalogo_btn_entrar_carrito'])) {
