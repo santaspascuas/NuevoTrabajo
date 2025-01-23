@@ -376,6 +376,11 @@ class Controlador{
                 $miApi = new MiAPIEjemplo();
              // Debo de obtener la informacion de los juegos.
              $infoJuego = $miApi->getInfoJuego($titulo);
+             // Tendria que descodificar el resultado
+             $_SESSION['infojuegos'] =$infoJuego;
+             
+
+
         }
         // Tengo la variable infojuego con todos los juegos.
         // Ya esta decofigicado en json. Ahora deberia conectar o poder hacer un fecth  a donde tengo la infor
@@ -383,7 +388,7 @@ class Controlador{
 
 
         
-        print_r($infoJuego);
+        //print_r($infoJuego);
 
 
 

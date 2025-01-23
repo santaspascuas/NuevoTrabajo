@@ -64,7 +64,7 @@ class MiAPIEjemplo {
 			$ids = $this->getIdJuego($juego);
 			$ids = $ids['games'];
 			$datosJuego = $this->getDatosDeJuegoById($ids);
-			return json_decode($datosJuego, true); 
+			return  ($datosJuego);
 		}
 
 }
