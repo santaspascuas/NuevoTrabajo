@@ -13,10 +13,13 @@
 <body>
     <div class="container">
         <header>
-    <!-- //al no tener header te quedas en la ruta del controller -->
+            <!-- //al no tener header te quedas en la ruta del controller -->
             <form action="controlador.php" method="post">
-            <button type="submit" name="tmp_catalogo_btn_entrar_home"> <h1> Carrito</h1></button>
-            <button type="submit" name="tmp_catalogo_btn_entrar_carrito"><img src="https://www.svgrepo.com/show/477419/shopping-cart-14.svg" width="20rem"></button>
+                <button type="submit" name="tmp_inicio_btn_entrar_catalogo">
+                    <h1> Carrito</h1>
+                </button>
+                <button type="submit" name="tmp_catalogo_btn_entrar_carrito"><img
+                        src="https://www.svgrepo.com/show/477419/shopping-cart-14.svg" width="20rem"></button>
             </form>
             <div class="search-container">
                 <form action="catalogo.php" method="post">
@@ -32,22 +35,19 @@
             <!-- iteramos sobre el foreach , por cada elemento del array se mostraria la tarjeta cde cada juego.
             Mostramos datos como la imagen , tutulo , año etc. -->
             <?php foreach ($juegos as $juego): ?>
-                
-                 
-
-                    <div class="movie-card">
-                        <img src="<?php echo $juego->getImage() ?>" alt="<?php echo $juego->getTitulo() ?>">
-                        <div class="movie-info">
-                            <h2><?php echo $juego->getTitulo() ?></h2>
-                            <p><?php echo $juego->getYear() ?></p>
-                        </div>
+                <div class="movie-card">
+                    <img src="<?php echo $juego->getImage() ?>" alt="<?php echo $juego->getTitulo() ?>">
+                    <div class="movie-info">
+                        <h2><?php echo $juego->getTitulo() ?></h2>
+                        <p><?php echo $juego->getYear() ?></p>
                     </div>
-                
-                    <?php endforeach ?>
+                </div>
+
+            <?php endforeach ?>
 
         </main>
     </div>
-   
+
 </body>
 
 </html>
