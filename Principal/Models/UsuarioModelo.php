@@ -418,16 +418,6 @@ class Usuariodb
 
 
 
-
-
-
-
-
-
-
-=======
->>>>>>> c6422d7137e55fc8aa98cc73a8c264e812fa32d8
-
     public static function AgregarAlCarrito($idUsuario, $idJuego)
     {
         try {
