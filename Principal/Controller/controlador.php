@@ -8,36 +8,38 @@ require_once "./api_php_javascript.php";
 session_start();
 
 
-class Controlador{
+class Controlador
+{
 
 
-    public function login() {
+    public function login()
+    {
         // Comprobar si se recibieron las variables del formulario
         if (isset($_POST['email']) && isset($_POST['password'])) {
             $email = trim($_POST['email']);
             $contrasena = trim($_POST['password']);
-    
+
             // Validar que los campos no estén vacíos
             if (empty($email) || empty($contrasena)) {
                 echo "El email y la contraseña son obligatorios.";
                 Vista::login();
                 return; // Salir para evitar procesamiento adicional
             }
-    
+
             // Determinar si es un email o un nick y buscar en la base de datos
             if (strpos($email, '@') !== false) {
                 $consulta = Usuariodb::ConsultaEmail($email); // Buscar por email
             } else {
                 $consulta = Usuariodb::ConsultaNick($email); // Buscar por nick
             }
-    
+
             // Verificar si la consulta devolvió resultados
             if (!$consulta) {
                 echo "El usuario no existe.";
                 Vista::login();
                 return; // Salir si no hay resultados
             }
-    
+
             // Verificar la contraseña
             if (
                 (isset($consulta['password_hash']) && password_verify($contrasena, $consulta['password_hash'])) || // Caso de contraseña cifrada
@@ -45,14 +47,15 @@ class Controlador{
             ) {
                 // Inicio de sesión correcto
                 $_SESSION['usuarioLogueado'] = [
+                    'id' => $consulta['id'],
                     'nick' => $consulta['nick'],
                     'email' => $consulta['email'],
                     'nombre' => $consulta['nombre'],
-                    'rol' => $consulta['ROL']
+                    'rol' => $consulta['Rol']
                 ];
-    
+
                 //echo "Inicio de sesión correcto. Bienvenido, " . $consulta['nick'];
-    
+
                 // Redirigir al home
                 //header("Location:../Views/index.php");
                 Vista::muestraHome();
@@ -66,89 +69,99 @@ class Controlador{
             Vista::login();
         }
     }
-    
-    
 
-    public function registro(){
-            Vista::registro();
-           
 
-            if(!empty($_POST['email'])){
-                $email = $_POST['email'];
-                if(!FILTER_VAR($email, FILTER_VALIDATE_EMAIL)){
+
+    public function registro()
+    {
+        Vista::registro();
+
+
+        if (!empty($_POST['email'])) {
+            $email = $_POST['email'];
+            if (!FILTER_VAR($email, FILTER_VALIDATE_EMAIL)) {
                 echo "El email introducido no es valido";
-                }
             }
+        }
 
 
 
-            if(!empty($_POST['nick'])){
-                $nick = $_POST['nick'];
-                $nick = trim($nick);
-                echo $nick;
+        if (!empty($_POST['nick'])) {
+            $nick = $_POST['nick'];
+            $nick = trim($nick);
+            echo $nick;
+        }
+
+
+        if (!empty($_POST['password'])) {
+            $pass = $_POST['password'];
+            if (preg_match("/^[a-zA-Z]{1,12}$/", $pass)) {
+                echo "Tu contraseña no es valida";
             }
+        }
 
 
-            if(!empty($_POST['password'])){
-                $pass = $_POST['password'];
-                if (preg_match("/^[a-zA-Z]{1,12}$/", $pass)){
-                    echo "Tu contraseña no es valida";
-                }
-            }
+        if (!empty($_POST['firstName'])) {
+            $nombre = $_POST['firstName'];
+            $nombre = trim($nombre);
+        }
+
+        if (!empty($_POST['lastName'])) {
+            $apellidos = $_POST['lastName'];
+            $apellidos = trim($apellidos);
+        }
 
 
-            if(!empty($_POST['firstName'])){
-                $nombre = $_POST['firstName'];
-                $nombre = trim($nombre);
-                }
-
-            if(!empty($_POST['lastName'])){
-                $apellidos = $_POST['lastName'];
-                $apellidos = trim($apellidos);
-            }
+        if (!empty($_POST['tipoVia'])) {
+            $via = $_POST['tipoVia'];
+        }
 
 
-            if(!empty($_POST['tipoVia'])){
-                $via = $_POST['tipoVia'];
-            }
+        if (!empty($_POST['nombreVia'])) {
+            $nombrevia = $_POST['nombreVia'];
+            $nombrevia = trim($nombrevia);
+        }
 
 
-            if(!empty($_POST['nombreVia'])){
-                $nombrevia = $_POST['nombreVia'];
-                $nombrevia = trim($nombrevia);
-            }
+        if (!empty($_POST['numero'])) {
+            $numero = $_POST['numero'];
+        }
+
+        if (!empty($_POST['telefono'])) {
+            $telefono = $_POST['telefono'];
+        }
 
 
-            if(!empty($_POST['numero'])){
-                $numero = $_POST['numero'];
-            }
 
-            if(!empty($_POST['telefono'])){
-                $telefono = $_POST['telefono'];
-            }
+        // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
+        $tabla = "usuario";
 
-        
-
-            // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
-             $tabla = "usuario";
-
-             if(!empty($email)){
+        if (!empty($email)) {
             // Llamamos a la función de comprobar email que a su vez esta usando la funcion de comprobar desde usuario d
-            $respuesta = Usuariodb::ConsultarporEmail($tabla,$email);
+            $respuesta = Usuariodb::ConsultarporEmail($tabla, $email);
 
-            
-            if($respuesta){
+
+            if ($respuesta) {
                 echo "El email ya esta registrado";
                 //Te manda mensaje y deberia de hacer algo diferente
-            }else{
+            } else {
                 echo "El email no esta registrado. Puedes crear el usuario";
                 // Aqui añadimos un nuevo usuario. El nuevo usuario esta creado
-                $usuario = new UsuarioNuevo($email,$nombre,$pass,$apellidos,$via,
-                $nombrevia,$numero,$telefono,$nick);
+                $usuario = new UsuarioNuevo(
+                    $email,
+                    $nombre,
+                    $pass,
+                    $apellidos,
+                    $via,
+                    $nombrevia,
+                    $numero,
+                    $telefono,
+                    $nick
+                );
                 //EL PROBLEMA ESTA QUE QUIERO LLMAR A UNA FUNCION DE LA CLASE
                 //USUARIODB PERO NO LA HE INSTANCIADO PARA PODER USAR SUS FUNCIONES.
-                $usuarioDB=new Usuariodb();
-                $usuarioDB->CrearUsuario($nick,$email,$nombre,$apellidos,$pass);
+                $usuarioDB = new Usuariodb();
+                $usuarioDB->CrearUsuario($nick, $email, $nombre, $apellidos, $pass);
                 // Crearia una session y cookie. ¿Porque cookie? Porque necesit establecer un tiempo de session o mantenimiento en el caso de que el usuario este y tiempo limitado.
                 // Dice que puedo crear una array y luego meterlo en una session. ¿ Al loguearse no deberia crear una session?
                 // Una vez se confirma que se ha registrado. Me manda a login para comprobar el login. ! Plus añadir envio de correo!
@@ -159,87 +172,93 @@ class Controlador{
 
             }
 
-             }
+        }
 
     }
 
 
     /// Tabla de Administrador con la tabla usuario//////
 
-    public static function ctrUsuario(){
+    public static function ctrUsuario()
+    {
 
         // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
-         $tabla = "usuario";
+        $tabla = "usuario";
 
-         $respuesta = Usuariodb::ctrUsuario($tabla);
+        $respuesta = Usuariodb::ctrUsuario($tabla);
 
-         return $respuesta;
+        return $respuesta;
 
     }
 
+<<<<<<< HEAD
 
     public static function admCrearUsuario(){
+=======
+    public static function admCrearUsuario()
+    {
+>>>>>>> c6422d7137e55fc8aa98cc73a8c264e812fa32d8
 
 
         // Debo de recoger los datos
 
-        if(!empty($_POST['email'])){
+        if (!empty($_POST['email'])) {
             $email = $_POST['email'];
-            if(!FILTER_VAR($email, FILTER_VALIDATE_EMAIL)){
-            echo "El email introducido no es valido";
+            if (!FILTER_VAR($email, FILTER_VALIDATE_EMAIL)) {
+                echo "El email introducido no es valido";
             }
         }
 
 
 
-        if(!empty($_POST['nick'])){
+        if (!empty($_POST['nick'])) {
             $nick = $_POST['nick'];
             $nick = trim($nick);
         }
 
 
-        if(!empty($_POST['password'])){
+        if (!empty($_POST['password'])) {
             $pass = $_POST['password'];
-            if (preg_match("/^[a-zA-Z]{1,12}$/", $pass)){
+            if (preg_match("/^[a-zA-Z]{1,12}$/", $pass)) {
                 echo "Tu contraseña no es valida";
             }
         }
 
 
-        if(!empty($_POST['firstName'])){
+        if (!empty($_POST['firstName'])) {
             $nombre = $_POST['firstName'];
             $nombre = trim($nombre);
-            }
+        }
 
-        if(!empty($_POST['lastName'])){
+        if (!empty($_POST['lastName'])) {
             $apellidos = $_POST['lastName'];
             $apellidos = trim($apellidos);
         }
 
-                   // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
-                   $tabla = "usuario";
+        // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
+        $tabla = "usuario";
 
-        if(!empty($email)){
+        if (!empty($email)) {
             // Llamamos a la función de comprobar email que a su vez esta usando la funcion de comprobar desde usuario d
-            $respuesta = Usuariodb::ConsultarporEmail($tabla,$email);
+            $respuesta = Usuariodb::ConsultarporEmail($tabla, $email);
 
-            
-            if($respuesta){
+
+            if ($respuesta) {
                 echo "El email ya esta registrado";
                 //Te manda mensaje y deberia de hacer algo diferente
-            }else{
+            } else {
                 echo "El email no esta registrado. Puedes crear el usuario";
 
                 // No me haria falta crear un objeto nuevo de usuario.
-                $usuarioDB=new Usuariodb();
-                $usuarioDB->CrearUsuario($nick,$email,$nombre,$apellidos,$pass);
+                $usuarioDB = new Usuariodb();
+                $usuarioDB->CrearUsuario($nick, $email, $nombre, $apellidos, $pass);
                 // Crearia una session y cookie. ¿Porque cookie? Porque necesit establecer un tiempo de session o mantenimiento en el caso de que el usuario este y tiempo limitado.
                 // Dice que puedo crear una array y luego meterlo en una session. ¿ Al loguearse no deberia crear una session?
                 // Una vez se confirma que se ha registrado. Me manda a login para comprobar el login. ! Plus añadir envio de correo!
 
             }
 
-             }
+        }
         Vista::muestraAdministrador();
     }
 
@@ -250,40 +269,43 @@ class Controlador{
 
 
     ///--------------pagina de update-------------------------------------------------------------
-    public static function muestraUpdate(){
+    public static function muestraUpdate()
+    {
         // Tengo que verificar si recibo id y poner todos los datos.
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
 
             echo $id;
-             // Obtener los datos del usuario
-             $datosUsuario = self::ctrId($id);
-             //print_r ($datosUsuario);
+            // Obtener los datos del usuario
+            $datosUsuario = self::ctrId($id);
+            //print_r ($datosUsuario);
 
-             if ($datosUsuario) {
+            if ($datosUsuario) {
                 // Pasar los datos a la vista
                 include "..\Views\update.php"; // Ahora `update.php` puede usar $datosUsuario directamente.
             } else {
                 echo "No se encontró información para el usuario solicitado.";
             }
-        }else{
+        } else {
 
             echo "No he recibido datos del id valido";
         }
-            Vista::muestraUpdate();
+        Vista::muestraUpdate();
     }
 
     // Aqui estamos usando esto para printear con el id
 
-    public static function ctrid($id){
+    public static function ctrid($id)
+    {
 
         // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
-         $tabla = "usuario";
-         return Usuariodb::ctrid($tabla,$id);
+        $tabla = "usuario";
+        return Usuariodb::ctrid($tabla, $id);
     }
 
 
-    public static function muestraActualizacionUser(){
+    public static function muestraActualizacionUser()
+    {
 
         // Aqui iriamos a administrador. Vamos a hacer pruebas primero.
         /// Aqui empezaria a recibir cosas de mi primer formulario de actualizacion.
@@ -322,21 +344,22 @@ class Controlador{
 
         // Deberiamos tener algo que lo confirme
 
-        $peticion = Usuariodb::adminActualizarUsers($nick,$email,$nombre,$apellidos,$pass,$rol,$id);
+        $peticion = Usuariodb::adminActualizarUsers($nick, $email, $nombre, $apellidos, $pass, $rol, $id);
 
-        if($peticion){
+        if ($peticion) {
             // Como ha salido bien. Deberia ir directo a la vista de administrador.
 
             Vista::muestraAdministrador();
             exit; // Asegurar que no se ejecute más código
 
-        }else{
+        } else {
 
         }
 
     }
 
-    public function muestraEliminado(){
+    public function muestraEliminado()
+    {
         // Como ya tengo la información en el formuario. Unicamente activo el boton y recibo el id.
         // Con este id lo que vamos a hacer es realizar un delete.
         if (isset($_POST['id']) && !empty($_POST['id'])) {
@@ -346,7 +369,7 @@ class Controlador{
             $consulta = Usuariodb::adminEliminarUsers($id);
 
 
-            if($consulta){
+            if ($consulta) {
                 // Como ha salido bien. Deberia ir directo a la vista de administrador y veria la eliminación del usuario.
                 Vista::muestraAdministrador();
                 exit; // Asegurar que no se ejecute más código
@@ -357,15 +380,17 @@ class Controlador{
     }
 
 
-///--------------pagina relacionada con los juegos. Carga en la base de datos-------------------------------------------------------------
+    ///--------------pagina relacionada con los juegos. Carga en la base de datos-------------------------------------------------------------
 
-    public function muestraPaginaJuegos(){
+    public function muestraPaginaJuegos()
+    {
         // Es la pagina de Juegos cargada desde el administrador.
         Vista::muestraCargaJuegos();
 
     }
 
-    public function buscarJuego(){
+    public function buscarJuego()
+    {
         Vista::muestraCargaJuegos();
         if (isset($_POST['titulo']) && !empty($_POST['titulo'])) {
             // Si se ha enviado el formulario de actualizacion y no esta vacio.
@@ -373,6 +398,7 @@ class Controlador{
             echo $titulo . "La busqueda que hago con el boton";
             // Aqui deberia instanciar la clase de mi api.
             // Para ello tengo que hacer un required.
+<<<<<<< HEAD
              // Instanciar la clase de la API
             $miApi = new MiAPIEjemplo();
              // Debo de obtener la informacion de los juegos.
@@ -380,12 +406,24 @@ class Controlador{
              //ZONA DE PRUEBAS------------------
              // Tendria que descodificar el resultado
              $_SESSION['infojuegos'] =$infoJuego;
+=======
+            // Instanciar la clase de la API
+            $miApi = new MiAPIEjemplo();
+            // Debo de obtener la informacion de los juegos.
+            $infoJuego = $miApi->getInfoJuego($titulo);
+            // Tendria que descodificar el resultado
+            $_SESSION['infojuegos'] = $infoJuego;
+
+
+
+>>>>>>> c6422d7137e55fc8aa98cc73a8c264e812fa32d8
         }
         // Tengo la variable infojuego con todos los juegos.
         // Ya esta decofigicado en json. Ahora deberia conectar o poder hacer un fecth  a donde tengo la infor
 
 
 
+<<<<<<< HEAD
     }
 
       /// iNSERRTAR JUEGOS EN LA BASE DE DATOS----------------------------------------------------//
@@ -488,6 +526,10 @@ class Controlador{
 
 
 
+=======
+
+        //print_r($infoJuego);
+>>>>>>> c6422d7137e55fc8aa98cc73a8c264e812fa32d8
 
 
 
@@ -496,55 +538,90 @@ class Controlador{
 
     }
     // Funciones solo para el index.
+<<<<<<< HEAD
     public function muestraHome(){
+=======
+
+    public function muestraHome()
+    {
+>>>>>>> c6422d7137e55fc8aa98cc73a8c264e812fa32d8
         // Aqui estamos llamando al home por defecto. Empezamos los botones
         Vista::muestraHome();
     }
 
     // Aqui va a ir la funcion del perfil
-    public function muestraPerfil(){
+    public function muestraPerfil()
+    {
         // Aqui estamos llamando al home por defecto. Empezamos los botones
         Vista::muestraPerfil();
     }
-    public function muestraLogin(){
+    public function muestraLogin()
+    {
         // Aqui estamos llamando al home por defecto. Empezamos los botones
         Vista::muestraLogin();
     }
-    public function muestraRegistro(){
+    public function muestraRegistro()
+    {
         // Aqui estamos llamando al home por defecto. Empezamos los botones
         Vista::muestraRegistro();
     }
 
-    public function muestraAdministrador(){
+    public function muestraAdministrador()
+    {
         // Aqui estamos llamando al home por defecto. Empezamos los botones
 
         Vista::muestraAdministrador();
     }
 
 
-    public function muestraCarrito(){
+    public function muestraCarrito()
+    {
 
         // Aqui estamos llamando al home por defecto. Empezamos los botones
-        
+
         Vista::muestraCarrito();
 
-    
+
 
 
     }
 
-    public function muestraCatalogo(){
+    public function muestraCatalogo()
+    {
 
         // Aqui estamos llamando al home por defecto. Empezamos los botones
-        
-       $catalogo = new CatalogoController();
-         $catalogo->listarCatalogo('');
+
+        $catalogo = new CatalogoController();
+        $catalogo->listarCatalogo(null);
+
+    }
+
+
+    public function filtrarCatalogo($filtro)
+    {
+
+        // Aqui estamos llamando al home por defecto. Empezamos los botones
+
+        $catalogo = new CatalogoController();
+        $catalogo->listarCatalogo($filtro);
+
+    }
+
+    public function volcarCatalago()
+    {
+
+        // Aqui estamos llamando al home por defecto. Empezamos los botones
+
+        $catalogo = new CatalogoController();
+        $catalogo->volcarCatalago();
 
     }
 }
 
 
-    
+
+
+
 
 //Fin del controlador
 
@@ -560,64 +637,92 @@ $aplicacion = new Controlador();
 // Si hay una sesión activa, ajustamos la vista inicial a la home.
 // Asi tendremos controlado po defecto lo que vea. 
 if (isset($_SESSION['usuarioLogueado'])) {
-    print_r($_SESSION['usuarioLogueado']);
+    //print_r($_SESSION['usuarioLogueado']);
 }
 
 // Control de flujo según las acciones del index.
 // cada boton al darle , carga la variable que guarda una funcion , dicha funcion como por ejemplo muestraHome() que es la que se encarga de mostrar la vista de inicio.
-    if (isset($_POST['tmp_inicio_btn_entrar_registro'])) {
-        $aplicacion->muestraRegistro();
-    }
+if (isset($_POST['tmp_inicio_btn_entrar_registro'])) {
+    $aplicacion->muestraRegistro();
+}
 
-    if (isset($_POST['tmp_inicio_btn_entrar_login'])) {
-        $aplicacion->muestraLogin();
-    }
+if (isset($_POST['tmp_inicio_btn_entrar_login'])) {
+    $aplicacion->muestraLogin();
+}
 
-    if (isset($_POST['tmp_inicio_btn_entrar_home'])) {
-        $aplicacion->muestraHome();
-    }
-    if (isset($_POST['tmp_inicio_btn_entrar_perfil'])) {
-        $aplicacion->muestraPerfil();
-    }
-    if (isset($_POST['tmp_inicio_btn_entrar_Administrador'])) {
-        $aplicacion->muestraAdministrador();
-    }
-    if (isset($_POST['tmp_inicio_btn_entrar_catalogo'])) {
-        $aplicacion->muestraCatalogo();
-    }
-    if (isset($_POST['tmp_inicio_btn_entrar_carrito'])) {
-        $aplicacion->muestraCarrito();
-    }
-    if (isset($_POST['tmp_inicio_btn_entrar_salir'])) {
-        session_destroy();
-        $aplicacion->muestraHome();
-        exit();
-    }
-
+if (isset($_POST['tmp_inicio_btn_entrar_home'])) {
+    $aplicacion->muestraHome();
+}
+if (isset($_POST['tmp_inicio_btn_entrar_perfil'])) {
+    $aplicacion->muestraPerfil();
+}
+if (isset($_POST['tmp_inicio_btn_entrar_Administrador'])) {
+    $aplicacion->muestraAdministrador();
+}
+if (isset($_POST['tmp_inicio_btn_entrar_catalogo'])) {
+    $aplicacion->muestraCatalogo();
+}
+if (isset($_POST['tmp_inicio_btn_entrar_carrito'])) {
+    $aplicacion->muestraCarrito();
+}
+if (isset($_POST['tmp_inicio_btn_entrar_salir'])) {
+    session_destroy();
+    $aplicacion->muestraHome();
+    exit();
+}
+// ---------------------------------------------------------------------------------------
 if (isset($_POST['tmp_catalogo_btn_entrar_home'])) {
     Vista::muestraHome();
 }
+if (isset($_POST['titulo'])) {
+    $aplicacion->filtrarCatalogo($_POST['titulo']);
+}
+if (isset($_POST['tmp_catalago_btn_volcar'])) {
+    $aplicacion->volcarCatalago();
+}
+if (isset($_POST['tmp_catalogo_btn_aplicar_filtros'])) {
+    $titulo = $_POST['catalogo_filtro_titulo'];
+    $genero = $_POST['catalogo_filtro_genero'];
+    $anyo = $_POST['catalogo_filtro_anyo'];
+    $plataforma = $_POST['catalogo_filtro_plataforma'];
+
+    $aplicacion->filtrarCatalogo(new FiltroJuegos($genero, $plataforma, $titulo, $anyo));
+}
 
 if (isset($_POST['tmp_catalogo_btn_anadir_carrito'])) {
-    $titulo=$_POST['title'];
-    $year=$_POST['year'];
-    $image=$_POST['image'];
-    $description=$_POST['description'];
-    $juego= new Juego($titulo,$year,$image,$description);
+    $id = $_POST['id'];
+    $titulo = $_POST['title'];
+    $year = $_POST['year'];
+    $image = $_POST['image'];
+    $description = $_POST['description'];
+    $juego = new Juego($id, $titulo, $description, "", $year, $image);
 
-    if (isset($_SESSION['carrito'])){
+    if (isset($_SESSION['carrito'])) {
         $carrito = unserialize($_SESSION['carrito']);
-    }else{
+    } else {
         $carrito = [];
 
     }
 
-        $carrito[]=$juego;
-        $_SESSION['carrito']=serialize($carrito);
-
-        $catalogo = new CatalogoController();
-        $catalogo->listarCatalogo("");
+    if (isset($_SESSION['usuarioLogueado'])) {
+        Usuariodb::AgregarAlCarrito($_SESSION['usuarioLogueado']['id'], $juego->getId());
+        $juego->setPersisted(true);
+        foreach ($carrito as $j) {
+            if (!$j->isPersisted()) {
+                Usuariodb::AgregarAlCarrito($_SESSION['usuarioLogueado']['id'], $j->getId());
+                $j->setPersisted(true);
+            }
+        }
     }
+
+    $carrito[] = $juego;
+    $_SESSION['carrito'] = serialize($carrito);
+
+
+
+    $catalogo = new CatalogoController();
+    $catalogo->listarCatalogo(null);
+}
 
 
 if (isset($_POST['tmp_catalogo_btn_entrar_carrito'])) {
@@ -639,41 +744,41 @@ if (isset($_POST['tmp_inicio_btn_entrar_registro'])) {
     $aplicacion->muestraRegistro();
 }
 
-if(isset($_POST['tmp_login_btn_registro'])){
-    
+if (isset($_POST['tmp_login_btn_registro'])) {
+
     $aplicacion->registro();
 }
 
 // Boton para tener acceso a login de nuevo y empezaer a recibir los datos
 
-if(isset($_POST['tmp_login_btn_login'])){
-    
+if (isset($_POST['tmp_login_btn_login'])) {
+
     $aplicacion->login();
 }
 
 
 // Boton para llamar a registro y entrar para las validaciones
 
-if(isset($_POST['tmp_registro_btn_registro'])){
-    
+if (isset($_POST['tmp_registro_btn_registro'])) {
+
     $aplicacion->registro();
 }
 
 
 ////-------------------Administrador--------------------------------------///
 
-if(isset($_POST['tmp_admin_crear_usuario'])){
-    
+if (isset($_POST['tmp_admin_crear_usuario'])) {
+
     $aplicacion->admCrearUsuario();
 }
 
 
-if(isset($_POST['tmp_admin_eliminar_usuario'])){
-    $aplicacion ->eliminarUsuario();
+if (isset($_POST['tmp_admin_eliminar_usuario'])) {
+    $aplicacion->eliminarUsuario();
 }
 
-if(isset($_GET['id'])){
-    $aplicacion ->muestraUpdate();
+if (isset($_GET['id'])) {
+    $aplicacion->muestraUpdate();
 }
 
 
@@ -684,14 +789,14 @@ if(isset($_GET['id'])){
 // Recibiria el voton eh iria a administrador. Aqui sera mostrar administrador y hacer un update
 
 
-if(isset($_POST['tmp_update_actualizar_user'])){
+if (isset($_POST['tmp_update_actualizar_user'])) {
 
-    $aplicacion ->muestraActualizacionUser();
+    $aplicacion->muestraActualizacionUser();
 }
 
-if(isset($_POST['tmp_update_eliminar_user'])){
+if (isset($_POST['tmp_update_eliminar_user'])) {
 
-    $aplicacion ->muestraEliminado();
+    $aplicacion->muestraEliminado();
 }
 
 
@@ -700,16 +805,21 @@ if(isset($_POST['tmp_update_eliminar_user'])){
 
 // Viene de Administrador y nos lleva a la pagina de ejemplo Api.
 
-if(isset($_POST['tmp_admin_crearJuegos'])){
+if (isset($_POST['tmp_admin_crearJuegos'])) {
     echo "He entrado desde el administardor.";
-    $aplicacion ->muestraPaginaJuegos();
+    $aplicacion->muestraPaginaJuegos();
 }
 
 // Este boton es el boton de busqueda del juego.
 
+<<<<<<< HEAD
 if(isset($_POST['tmp_admin_inyectar_juego'])){
+=======
+
+if (isset($_POST['tmp_admin_inyectar_juego'])) {
+>>>>>>> c6422d7137e55fc8aa98cc73a8c264e812fa32d8
     echo "Boton del juego";
-    $aplicacion ->buscarJuego();
+    $aplicacion->buscarJuego();
 }
 
 
