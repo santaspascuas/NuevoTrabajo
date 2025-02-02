@@ -59,15 +59,75 @@ class MiAPIEjemplo {
 			return (curl_exec($this->c));
 		}
 
+
+
+
 		public function getInfoJuego($juego) {
 			//$_SESSION['avisos'].='<br>Entro en getInfoJuego();';
-			$ids = $this->getIdJuego($juego);
+			$ids = $this->getIdJuego($juego);// Esto obtiene los ids
 			$ids = $ids['games'];
 			$datosJuego = $this->getDatosDeJuegoById($ids);
 			return  ($datosJuego);
 		}
 
+		public function getCompani($juego) {
+
+			/////Imporrante///
+			/*
+			//pORQUE VAS A USAR IDS CUANDO YA TIENES UNA RESPUESTA CON LOS JUEGOS//
+			DEBERIAMOS RECIBIR LA RESPUESTA Y TRASNFORMARLA EN UN ARRAY ASOCIATIVO PARA SACAR LA INFORMACIÓN
+
+			*/
+
+			//Recibiria la respuesta
+
+			$data = json_decode($juego, true); // Para convertirlo en un array.
+			$games = $data['games'];
+			// vAMOS A PROBAR A SACAR COSAS
+			$infoPlataforma = [];
+			foreach ($games as $game) {
+				//Recojo porque uso el indice y me meto dentro de lo que hay
+				//Vamos a sacar las plataformas
+				foreach ($game['platforms'] as $platform){
+					// Aqui estaria entrando dentro de la plataformas y es un array y hay que recorrerlo
+					$infoPlataforma[]=[
+						'idJuego' => $game['game_id'],
+						'plataformaID' => $platform['platform_id'] ?? 'Desconocida',
+						'Año'=>$platform['first_release_date'] ?? 'Desconocida',
+						'compania' => $platform['platform_name'] ??'Desconocida',
+					];
+				}
+			}
+
+			//echo print_r($games);
+			//zONA DE PRUEBA
+			return $infoPlataforma;
+		}
+		
+
 }
+
+
+
+//Zona de pruebas
+
+/*
+$miApi = new MiAPIEjemplo();
+
+$infoJuego = $miApi->getInfoJuego('monkey');
+
+// El problema esta que viene decodificado
+//echo print_r($infoJuego);
+echo "<hr>";
+$procesado = $miApi->getCompani($infoJuego); // Aqui obtendria el array con la información que se obtiene de los juegos.
+
+
+echo print_r($procesado);
+
+*/
+
+
+
 
 
 

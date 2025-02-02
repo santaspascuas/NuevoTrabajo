@@ -177,6 +177,7 @@ class Controlador{
 
     }
 
+
     public static function admCrearUsuario(){
 
 
@@ -369,26 +370,124 @@ class Controlador{
         if (isset($_POST['titulo']) && !empty($_POST['titulo'])) {
             // Si se ha enviado el formulario de actualizacion y no esta vacio.
             $titulo = $_POST['titulo'];
-            echo $titulo;
+            echo $titulo . "La busqueda que hago con el boton";
             // Aqui deberia instanciar la clase de mi api.
             // Para ello tengo que hacer un required.
              // Instanciar la clase de la API
-                $miApi = new MiAPIEjemplo();
+            $miApi = new MiAPIEjemplo();
              // Debo de obtener la informacion de los juegos.
              $infoJuego = $miApi->getInfoJuego($titulo);
+             //ZONA DE PRUEBAS------------------
              // Tendria que descodificar el resultado
              $_SESSION['infojuegos'] =$infoJuego;
-             
-
-
         }
         // Tengo la variable infojuego con todos los juegos.
         // Ya esta decofigicado en json. Ahora deberia conectar o poder hacer un fecth  a donde tengo la infor
 
 
 
-        
-        //print_r($infoJuego);
+    }
+
+      /// iNSERRTAR JUEGOS EN LA BASE DE DATOS----------------------------------------------------//
+
+    public function recibirJuegos(){
+        // Aqui iria los datos que recibiria de la parte de juegos.
+        echo 'LOs datos del juego se reciben por aqui';
+    // Aqui recibo los datos de los juegos para darlos de alta
+     Vista::muestraAdministrador();
+     //Vista::muestraCargaJuegos();
+
+        if (isset($_POST['tituloid']) && !empty($_POST['tituloid'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $id=$_POST['tituloid'];
+        }
+
+        if (isset($_POST['tituloJuego']) && !empty($_POST['tituloJuego'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $titulo=$_POST['tituloJuego'];
+        }
+
+        if (isset($_POST['plataformaid']) && !empty($_POST['plataformaid'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $desarrollo=$_POST['plataformaid'];
+        }
+
+        if (isset($_POST['plataforma']) && !empty($_POST['plataforma'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $distribuidor=$_POST['plataforma'];
+        }
+        if (isset($_POST['anios']) && !empty($_POST['anios'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $anos=$_POST['anios'];
+        }
+        if (isset($_POST['generos']) && !empty($_POST['generos'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $generos = $_POST['generos'];
+        }
+        if (isset($_POST['mobyScore']) && !empty($_POST['mobyScore'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $urlJuego = $_POST['mobyScore'];
+        }
+
+        if (isset($_POST['descripcion']) && !empty($_POST['descripcion'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $discripcion=$_POST['descripcion'];
+        }
+
+        if (isset($_POST['urlImagen']) && !empty($_POST['urlImagen'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $urlImagen = $_POST['urlImagen'];
+        }
+
+        if (isset($_POST['fichero']) && !empty($_POST['fichero'])){
+            echo "Estoy recibiendo el fichero subido zip"; // Confirmamos que ha entrado.
+
+            $archivoZip = $_FILES['archivo_zip']['tmp_name']; // Asignamos el fichero a una variable
+            //Ahora debemos guardar ek fichero en un directorio 
+            $destino = "archivo_extraido/".$_FILES['archivo_zip']['name']; 
+            if (!is_dir("archivo_extraido")) {
+                mkdir("archivo_extraido", 0777, true);
+            }
+            $guardado = move_uploaded_file($_FILES['archivo_zip']['tmp_name'], $destino);
+
+            if ($guardado) {
+                echo "El archivo se subió correctamente.";
+            } else {
+                echo "Error al subir el archivo.";
+            }
+
+        }
+
+
+
+
+
+
+
+
+    $respuesta = Usuariodb::adminInserJuegos($id,$titulo,$desarrollo,$distribuidor,
+        $anos,$urlJuego,$discripcion, $urlImagen );
+    if($respuesta){
+        // Como ha salido bien. Deberia ir directo a la vista de administrador.
+        echo "Ha entrado en el sql correctamente";
+        Vista::muestraAdministrador();
+        exit; // Asegurar que no se ejecute más código
+    }
+
+     /// iNSERRTAR JUEGOS EN LA BASE DE DATOS-------------------------------------------------------------------//
+
+
+
+     ///////------------------------------------  Cargar los juegos en una tabla en administrador-----------------------------------------//
+
+
+
+
+     ///////------------------------------------  Cargar los juegos en una tabla en administrador-----------------------------------------//
+
+
+
+
 
 
 
@@ -396,18 +495,7 @@ class Controlador{
 
 
     }
-
-
-
-
-
-
-
-
-
-
     // Funciones solo para el index.
-
     public function muestraHome(){
         // Aqui estamos llamando al home por defecto. Empezamos los botones
         Vista::muestraHome();
@@ -619,14 +707,27 @@ if(isset($_POST['tmp_admin_crearJuegos'])){
 
 // Este boton es el boton de busqueda del juego.
 
-
 if(isset($_POST['tmp_admin_inyectar_juego'])){
     echo "Boton del juego";
     $aplicacion ->buscarJuego();
 }
 
 
+// Este boton sera para recepcionar los datos de los juegos rellenados
 
+if(isset($_POST['tmp_admin_crearJuegos_apiEjemplo'])){
+    $aplicacion ->recibirJuegos();
+}
+
+
+
+/// nOTAS
+// fICJERO DENTRO DE HTDOCS . CARPETA IMPORT--
+// dENTRO DE IMPORT SE DESCOMPRIME LOS DOS FICHEROS CON LA FORMACIÓN DE JSON Y XML
+// Esos juegos y caratulas no hace falta cargar pero la información de la base de datos viene en dos ficheros.
+// Formato json y xml----- Recorrer con php esos dos archivos y añadirlos a la base de datos y copiar
+// de la ruta donde guardanmos los juegos y las portadas.
+//Directorio de imagenes y de portadas.
 
 
 

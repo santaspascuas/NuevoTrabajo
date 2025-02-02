@@ -296,7 +296,59 @@ class Usuariodb{
         }
 
     }
+
+    ///Añadir la inyeccion de los datos por la base de datos--------TABLA DE JUEGOS PARA METER EN LA BASE DE DATOS------------------------
+
+
+        public static function adminInserJuegos($id,$titulo,$desarrollo,$distribuidor,
+        $anos,$urlJuego,$discripcion, $urlImagen ) {
+        try {
+            // Conexión con la base de datos
+            $conexion = Conectar::conexion();
     
+            // Preparar la consulta utilizando parámetros nombrados
+
+            /*          //Preparamos la consulta
+            $sql =("UPDATE USUARIO SET nick='$nick', email='$email', nombre='$nombre',
+            apellidos='$apellidos',password='$pass',ROL='$rol' WHERE id='$id'");*/
+
+            // Esto esta mal porque estaba inyectado valores directamente sin usar param.
+            // La funcion param hace que no pueda ser vulnerable a ataques de inyexccion sql.
+
+            // Consulta SQL preparada
+             $sql = "INSERT INTO juego (id, titulo, desarrollador, distribuidor, anio , ruta, descripcion, rutaImagen) 
+             VALUES (:id, :titulo, :desarrollador, :distribuidor, :anio , :ruta, :descripcion, :rutaImagen)";
+            
+            $stmt = $conexion->prepare($sql);
+
+            // Vincular parámetros
+            $stmt->bindParam(":id", $id, PDO::PARAM_STR); // ID como string (siempre es mejor asegurarse del tipo)
+            $stmt->bindParam(":titulo", $titulo, PDO::PARAM_STR);
+            $stmt->bindParam(":desarrollador", $desarrollo, PDO::PARAM_STR);
+            $stmt->bindParam(":distribuidor", $distribuidor, PDO::PARAM_STR);
+            $stmt->bindParam(":anio", $anos, PDO::PARAM_INT);  // Año debe ser un número
+            $stmt->bindParam(":ruta", $urlJuego, PDO::PARAM_STR);
+            $stmt->bindParam(":descripcion", $discripcion, PDO::PARAM_STR);
+            $stmt->bindParam(":rutaImagen",$urlImagen, PDO::PARAM_STR); // Corregido el tipo de dato
+            // Hay que tener cuidado con el tipo de dato que metemos en la base de datos
+    
+            // Ejecutar la consulta
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            // Manejar errores de la base de datos
+            error_log("Error al realizar la insercion de los juegos: " . $e->getMessage());
+            return null; // O lanzar una excepción personalizada
+        } finally {
+            // Cerrar la conexión
+            if (isset($conexion)) {
+                Conectar::cerrarConexion();
+            }
+        }
+    }
 
 
 

@@ -51,7 +51,7 @@ h3 {
 }
 
 /* Contenedores de géneros y plataformas */
-#generosContainer, #plataformaContainer {
+#generosContainer, #plataformaContainer,#generosContenedor {
     margin-top: 20px;
     padding: 15px;
     border-radius: 8px;
@@ -194,28 +194,51 @@ button:hover {
 </head>
 <body>
     <form id="formulario"  method="post" action="../Controller/controlador.php" >
+    <label for="tituloid">id:</label>
+    <input id="tituloid" name="tituloid" type="text" readonly><br>
+
         <label for="tituloJuego">Título:</label>
         <input id="tituloJuego" name="tituloJuego" type="text" readonly><br>
 
-        <label for="descripcion">Descripción:</label>
+        <label for="tituloJuego">Descripcion:</label>
         <input id="descripcion" name="descripcion" type="text" readonly><br>
 
-        <div id="generosContainer">
-        <label for="descripcion">Generos:</label>
-            <!-- Checkboxes se generarán aquí -->
-        </div>
+
+        <label for="plataformaid">Desarrollador:</label>
+        <input type="text" id="plataformaid" name="plataformaid" type="text" ><br>
 
         <div id="plataformaContainer">
-        <label for="descripcion">Plataforma:</label>
+        <label for="descripcion">Distribuidor:</label>
         <!-- Checkboxes se generarán aquí -->
         </div>
 
-        <label for="mobyScore">Puntuación:</label>
+        <div id="generosContainer">
+        <label for="descripcion">Año:</label>
+        <!-- Checkboxes se generarán aquí -->
+        </div>
+
+        <div id="generosContenedor">
+        <label for="descripcion">Generos:</label>
+        <!-- Checkboxes se generarán aquí los generos -->
+        </div>
+
+
+        <label for="mobyScore">Url:</label>
         <input id="mobyScore" name="mobyScore" type="text" readonly><br>
+
+        <label for="mobyScore">Url_Imagen:</label>
+        <input id="urlImagen" name="urlImagen" type="text" readonly><br>
+
+        <!-- Añadir un input para tipo fichero y aqui -->
+
+        <label for="mobyScore">Archivos Juegos:</label>
+        <input type="file" name="fichero">
 
         <button type="submit" class="submitBtn" name="tmp_admin_crearJuegos_apiEjemplo" value="CrearJuegos" >Añadir Juegos</button><br>
     </form>
     
+      <!-- Voy a poner aqui el boton que sea distinto-->
+
     <form id="boton"  method="post" action="../Controller/controlador.php" >
     <label for="titulo">Buscar Juego:</label>
         <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Prince of Persian">
@@ -223,7 +246,7 @@ button:hover {
     </form>
 
 
-
+    
     <div id="app"></div>
 
     <script defer>
@@ -276,6 +299,7 @@ if(x.games){
     `;
     // Creo que voy a hacer aqui la creación de un objeto dinamico para los juegos.
     const juegoObjeto = {
+        id:juego.game_id||'',
         titulo: juego.title || '',
         descripcion: juego.description || '',
         // Aqui al ser un array de los generos usamos map con una combinacion de ternario
@@ -283,7 +307,13 @@ if(x.games){
         // Esto hace que puedas meterte dentro y obtener los nombres de los juegos.
         puntuacion: juego.moby_score || '',
         //Genero la plataforma
-        plataforma: juego.platforms ? juego.platforms.map(plat => plat.platform_name) : []
+        plataforma: juego.platforms ? juego.platforms.map(plat => ({
+            id_plat:plat.platform_id,
+            nombre: plat.platform_name,
+            ano: plat.first_release_date,
+        })): [],
+        url:juego.moby_url||'',
+        imagen:juego.sample_cover.image
     };
     juegosArray.push(juegoObjeto); // Guardamos el objeto en un array
         // Guardamos una referencia al índice del juego en el array para luego recuperarlo
@@ -317,12 +347,15 @@ document.addEventListener("DOMContentLoaded", function () {
         cartaElemento.addEventListener("click", function () {
             let indice = parseInt(this.dataset.gameId);
               // Actualizamos los campos del formulario con los datos del juego seleccionado
+            formulario.elements['tituloid'].value = juegosArray[indice].id;
             formulario.elements['tituloJuego'].value = juegosArray[indice].titulo;
+            formulario.elements['mobyScore'].value = juegosArray[indice].url;
+            formulario.elements['urlImagen'].value = juegosArray[indice].imagen;
             formulario.elements['descripcion'].value = juegosArray[indice].descripcion;
-            formulario.elements['mobyScore'].value = juegosArray[indice].puntuacion;
 
             // Seleccionamos el contenedor de géneros
-            const generDiv = document.getElementById('generosContainer');
+            
+            const generDiv = document.getElementById('generosContenedor');
             if (!generDiv) {
                 console.error("El contenedor con el ID 'generosContainer' no existe en el HTML.");
                 return; // Detenemos la ejecución si no existe
@@ -337,6 +370,7 @@ document.addEventListener("DOMContentLoaded", function () {
             generDiv.appendChild(document.createElement('br'));
 
             let seleccionCarta = juegosArray[indice];
+            console.log(indice);
             if (!seleccionCarta || !Array.isArray(seleccionCarta.generos)) {
                 console.error("No se encontraron géneros para el juego seleccionado.");
                 return;
@@ -357,12 +391,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 generDiv.appendChild(labelJuego);
                 generDiv.appendChild(document.createElement('br'));
             }
+                
 
-            // vamos a seleccionar el contenedor de los generos.
+           // let seleccionCarta = juegosArray[indice];
+            // vamos a seleccionar el contenedor de las plataformas.
             const generaPlat = document.getElementById('plataformaContainer');
 
             // Confirmamos si existe y sino existe
-
             if(!generaPlat){
                 console.error("El contenedor con el ID 'generosContainer' no existe en el HTML.");
                 return; // Detenemos la ejecución si no existe
@@ -377,30 +412,126 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error("No se encontraron plataformas para el juego seleccionado.");
                 return;
             }
+            // Plasmamos las plataformas
+            for(let plataforma of seleccionCarta.plataforma){
+                const labelplataforma = document.createElement('label');
+                const checkbox = document.createElement('input');
 
-            // aqui empezariamos a realizar el for de la plataforma
+                checkbox.type = 'checkbox';
+                checkbox.value = plataforma.nombre;
+                checkbox.name = "plataforma";
 
-            console.log(seleccionCarta.plataforma);
+                labelplataforma.textContent = plataforma.nombre;
+                labelplataforma.htmlFor = plataforma.nombre;
 
+                generaPlat.appendChild(checkbox);
+                generaPlat.appendChild(labelplataforma);
+                generaPlat.appendChild(document.createElement('br'));
+            }
 
+            // Otro contenedor para el ano
+            // vamos a seleccionar el contenedor de las plataformas.
+            const generaAno = document.getElementById('generosContainer');
+            // Limpiamos el contenedor de Anos para evitar duplicados
+            generaAno.innerHTML = '';
+            const labelano = document.createElement('label');
+            labelano.textContent = 'Años de los juegos: ';
+            generaAno.appendChild(labelano);
+            generaAno.appendChild(document.createElement('br'));
 
+            //Vamos a plasmar los años
+            for(let plataforma of seleccionCarta.plataforma){
+                const labelAno = document.createElement('label');
+                const checkboxAno = document.createElement('input');
+                
+                checkboxAno.type = 'checkbox';
+                checkboxAno.value = plataforma.ano;
+                checkboxAno.name = "anios";
+                
+                labelAno.textContent = plataforma.ano;
+                labelAno.htmlFor = plataforma.ano;
 
+                generaAno.appendChild(checkboxAno);
+                generaAno.appendChild(labelAno);
+                generaAno.appendChild(document.createElement('br'));
+            }
 
         });
-
-
-
-
-
-
-
     }
+    // Deberia poner a escuchar tambien a los inputs generados y ya luego llamo a la funcion
+
 });
 
 
 
 
 
+
+
+/** IMPORTANTE */
+//La api  de luis no puede utilizar params sino que debes de inyectar las variables de forma dinamica con los templates.
+
+const apiKey = 'moby_Ivjf8fphPEz3gLn9DVIcRsvNYgE';
+const BASE_URL = 'https://games.eduardojaramillo.click/v1/games';
+
+/*--Planteamos las variables que vamos a utilizar que son la url basica de los endpoints y la clave--*/
+
+// Ya tengo la solicion pero primero voy a enfrentarme al reto yo solo//
+
+//Primero crear una funcion asyn con wait
+
+
+/*
+async function buscarDesarrollador(titulo, plataforma) {
+  try {
+    if (!titulo || !plataforma) {
+      throw new Error('Los parámetros título y plataforma son obligatorios.');
+    }
+
+    const url = `${BASE_URL}/${titulo}/platforms/${plataforma}?api_key=${apiKey}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+    });
+
+    if (response.status === 429) {
+      const retryAfter = response.headers.get('Retry-After') || 5;
+      console.warn(`Rate limit alcanzado. Reintentando en ${retryAfter} segundos...`);
+      await delay(retryAfter * 1000);
+      return buscarDesarrollador(titulo, plataforma);
+    }
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Hubo un problema con la solicitud:', error.message);
+  }
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Llamar a la función
+buscarDesarrollador('1', '6').then(data => {
+  if (data) {
+    console.log('Datos obtenidos correctamente:', data);
+  }
+});
+
+
+
+*/
+
+
+//Ha cargado. Necesito saber como se ha hecho y 
 
 
 </script>
