@@ -305,9 +305,8 @@ class Usuariodb
         }
 
     }
-<<<<<<< HEAD
 
-    ///Añadir la inyeccion de los datos por la base de datos--------TABLA DE JUEGOS PARA METER EN LA BASE DE DATOS------------------------
+        ///Añadir la inyeccion de los datos por la base de datos--------TABLA DE JUEGOS PARA METER EN LA BASE DE DATOS------------------------
 
 
         public static function adminInserJuegos($id,$titulo,$desarrollo,$distribuidor,
@@ -460,7 +459,7 @@ class Usuariodb
             // Cerrar conexión utilizando el método existente en la clase Conectar
             Conectar::cerrarConexion();
         }
-    }
+    };
 
     public static function obtenerCarrito($idUsuario)
     {
@@ -487,7 +486,7 @@ class Usuariodb
         } finally {
             Conectar::cerrarConexion();
         }
-    }
+    };
 }
 
 
