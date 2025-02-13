@@ -144,7 +144,7 @@ AHORA BIEN AL OBTENER CON FECTH ALL TODO. SI QUE PUEDES IBTENER LOS VALORES ENTE
             <td><?= htmlspecialchars($usuario['nombre']) ?></td>
             <td><?= htmlspecialchars($usuario['apellidos']) ?></td>
             <td><?= htmlspecialchars($usuario['password']) ?></td>
-            <td><?= htmlspecialchars($usuario['ROL']) ?></td>
+            <td><?= htmlspecialchars($usuario['rol']) ?></td>
             <!-- Estamos pasando el id por parametro GET a la vista para procesar luego como editar -->
             <td><a href=?id=<?= htmlspecialchars($usuario['id']) ?> class="users-table--edit">Editar</td>
             <td><a href=?id=<?= htmlspecialchars($usuario['id']) ?> class="users-table--edit">Eliminar</td>  

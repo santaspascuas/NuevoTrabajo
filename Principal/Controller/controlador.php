@@ -49,8 +49,9 @@ class Controlador{
                     'nick' => $consulta['nick'],
                     'email' => $consulta['email'],
                     'nombre' => $consulta['nombre'],
-                    'rol' => $consulta['Rol']
+                    'rol' => $consulta['rol']
                 ];
+                echo print_r($_SESSION['usuarioLogueado']);
 
                 //echo "Inicio de sesión correcto. Bienvenido, " . $consulta['nick'];
 

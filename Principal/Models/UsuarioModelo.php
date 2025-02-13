@@ -449,7 +449,7 @@ class Usuariodb
             // Cerrar conexión utilizando el método existente en la clase Conectar
             Conectar::cerrarConexion();
         }
-    };
+    }
 
     public static function obtenerCarrito($idUsuario)
     {
@@ -476,7 +476,7 @@ class Usuariodb
         } finally {
             Conectar::cerrarConexion();
         }
-    };
+    }
 }
 
 
