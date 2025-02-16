@@ -158,7 +158,7 @@ AHORA BIEN AL OBTENER CON FECTH ALL TODO. SI QUE PUEDES IBTENER LOS VALORES ENTE
     <div class="controls">
     </div>
     <form id="formulario" method="post" action="../Controller/controlador.php">
-        <button type="submit" class="submitBtn" name="tmp_admin_crearJuegos" value="CrearJuegos" >Añadir Juegos</button><br>
+        <button type="submit" class="submitBtn" name="tmp_admin__agregar_juego_vista" value="CrearJuegos" >Añadir Juegos</button><br>
     </form>
 
     <table>

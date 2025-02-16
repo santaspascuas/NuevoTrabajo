@@ -3,12 +3,14 @@ require_once "..\ViewController\Vista.php";
 require_once "..\Models\UsuarioModelo.php";
 require_once "./catalogoController.php";
 require_once "./api_php_javascript.php";
+// require_once "../tarjetaBancaria/tarjeta.php";
 
 
 session_start();
 
 
-class Controlador{
+class Controlador
+{
 
     public function login()
     {
@@ -133,66 +135,66 @@ class Controlador{
 
 
 
-         // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
-         $tabla = "usuario";
+        // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
+        $tabla = "usuario";
 
-         if (!empty($email)) {
-             // Llamamos a la función de comprobar email que a su vez esta usando la funcion de comprobar desde usuario d
-             $respuesta = Usuariodb::ConsultarporEmail($tabla, $email);
- 
- 
-             if ($respuesta) {
-                 echo "El email ya esta registrado";
-                 //Te manda mensaje y deberia de hacer algo diferente
-             } else {
-                 echo "El email no esta registrado. Puedes crear el usuario";
-                 // Aqui añadimos un nuevo usuario. El nuevo usuario esta creado
-                 $usuario = new UsuarioNuevo(
-                     $email,
-                     $nombre,
-                     $pass,
-                     $apellidos,
-                     $via,
-                     $nombrevia,
-                     $numero,
-                     $telefono,
-                     $nick
-                 );
-                 //EL PROBLEMA ESTA QUE QUIERO LLMAR A UNA FUNCION DE LA CLASE
-                 //USUARIODB PERO NO LA HE INSTANCIADO PARA PODER USAR SUS FUNCIONES.
-                 $usuarioDB = new Usuariodb();
-                 $usuarioDB->CrearUsuario($nick, $email, $nombre, $apellidos, $pass);
-                 // Crearia una session y cookie. ¿Porque cookie? Porque necesit establecer un tiempo de session o mantenimiento en el caso de que el usuario este y tiempo limitado.
-                 // Dice que puedo crear una array y luego meterlo en una session. ¿ Al loguearse no deberia crear una session?
-                 // Una vez se confirma que se ha registrado. Me manda a login para comprobar el login. ! Plus añadir envio de correo!
- 
-                 header("Location:../Views/login.php");
-                 // Solo con vistas.
- 
- 
-             }
- 
-         }
- 
+        if (!empty($email)) {
+            // Llamamos a la función de comprobar email que a su vez esta usando la funcion de comprobar desde usuario d
+            $respuesta = Usuariodb::ConsultarporEmail($tabla, $email);
+
+
+            if ($respuesta) {
+                echo "El email ya esta registrado";
+                //Te manda mensaje y deberia de hacer algo diferente
+            } else {
+                echo "El email no esta registrado. Puedes crear el usuario";
+                // Aqui añadimos un nuevo usuario. El nuevo usuario esta creado
+                $usuario = new UsuarioNuevo(
+                    $email,
+                    $nombre,
+                    $pass,
+                    $apellidos,
+                    $via,
+                    $nombrevia,
+                    $numero,
+                    $telefono,
+                    $nick
+                );
+                //EL PROBLEMA ESTA QUE QUIERO LLMAR A UNA FUNCION DE LA CLASE
+                //USUARIODB PERO NO LA HE INSTANCIADO PARA PODER USAR SUS FUNCIONES.
+                $usuarioDB = new Usuariodb();
+                $usuarioDB->CrearUsuario($nick, $email, $nombre, $apellidos, $pass);
+                // Crearia una session y cookie. ¿Porque cookie? Porque necesit establecer un tiempo de session o mantenimiento en el caso de que el usuario este y tiempo limitado.
+                // Dice que puedo crear una array y luego meterlo en una session. ¿ Al loguearse no deberia crear una session?
+                // Una vez se confirma que se ha registrado. Me manda a login para comprobar el login. ! Plus añadir envio de correo!
+
+                header("Location:../Views/login.php");
+                // Solo con vistas.
+
+
+            }
+
+        }
+
     }
 
- /// Tabla de Administrador con la tabla usuario//////
+    /// Tabla de Administrador con la tabla usuario//////
 
- public static function ctrUsuario()
- {
+    public static function ctrUsuario()
+    {
 
-     // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
-     $tabla = "usuario";
+        // Aqui deberiamos de tener el validador. Funciona pero lo mejor es tenerlo en otra funcion
+        $tabla = "usuario";
 
-     $respuesta = Usuariodb::ctrUsuario($tabla);
+        $respuesta = Usuariodb::ctrUsuario($tabla);
 
-     return $respuesta;
+        return $respuesta;
 
- }
+    }
 
 
 
- public static function admCrearUsuario()
+    public static function admCrearUsuario()
     {
 
 
@@ -297,7 +299,7 @@ class Controlador{
     }
 
 
-    
+
     public static function muestraActualizacionUser()
     {
 
@@ -385,13 +387,19 @@ class Controlador{
     }
 
 
-    public function buscarJuego()
+    public function muestraAgregarJuegoAPI()
     {
         Vista::muestraCargaJuegos();
+        // Tengo la variable infojuego con todos los juegos.
+        // Ya esta decofigicado en json. Ahora deberia conectar o poder hacer un fecth  a donde tengo la infor
+
+    }
+
+    public function buscarJuegoAPI()
+    {
         if (isset($_POST['titulo']) && !empty($_POST['titulo'])) {
             // Si se ha enviado el formulario de actualizacion y no esta vacio.
             $titulo = $_POST['titulo'];
-            echo $titulo . "La busqueda que hago con el boton";
             // Aqui deberia instanciar la clase de mi api.
             // Para ello tengo que hacer un required.
              // Instanciar la clase de la API
@@ -400,99 +408,100 @@ class Controlador{
              $infoJuego = $miApi->getInfoJuego($titulo);
              //ZONA DE PRUEBAS------------------
              // Tendria que descodificar el resultado
-             $_SESSION['infojuegos'] =$infoJuego;
-            // Instanciar la clase de la API
-            $miApi = new MiAPIEjemplo();
-            // Debo de obtener la informacion de los juegos.
-            $infoJuego = $miApi->getInfoJuego($titulo);
-            // Tendria que descodificar el resultado
-            $_SESSION['infojuegos'] = $infoJuego;
+             $_SESSION['infoJuego'] = $infoJuego;
 
+             Vista::muestraCargaJuegos();
         }
-        // Tengo la variable infojuego con todos los juegos.
-        // Ya esta decofigicado en json. Ahora deberia conectar o poder hacer un fecth  a donde tengo la infor
-
     }
 
-  /// iNSERRTAR JUEGOS EN LA BASE DE DATOS----------------------------------------------------//
+    /// iNSERRTAR JUEGOS EN LA BASE DE DATOS----------------------------------------------------//
 
-  public function recibirJuegos(){
-    // Aqui iria los datos que recibiria de la parte de juegos.
-    echo 'LOs datos del juego se reciben por aqui';
-// Aqui recibo los datos de los juegos para darlos de alta
- Vista::muestraAdministrador();
- //Vista::muestraCargaJuegos();
-
-    if (isset($_POST['tituloid']) && !empty($_POST['tituloid'])) {
-        // Si se ha enviado el formulario de actualizacion y no esta vacio.
-        $id=$_POST['tituloid'];
-    }
-
-    if (isset($_POST['tituloJuego']) && !empty($_POST['tituloJuego'])) {
-        // Si se ha enviado el formulario de actualizacion y no esta vacio.
-        $titulo=$_POST['tituloJuego'];
-    }
-
-    if (isset($_POST['plataformaid']) && !empty($_POST['plataformaid'])) {
-        // Si se ha enviado el formulario de actualizacion y no esta vacio.
-        $desarrollo=$_POST['plataformaid'];
-    }
-
-    if (isset($_POST['plataforma']) && !empty($_POST['plataforma'])) {
-        // Si se ha enviado el formulario de actualizacion y no esta vacio.
-        $distribuidor=$_POST['plataforma'];
-    }
-    if (isset($_POST['anios']) && !empty($_POST['anios'])) {
-        // Si se ha enviado el formulario de actualizacion y no esta vacio.
-        $anos=$_POST['anios'];
-    }
-    if (isset($_POST['generos']) && !empty($_POST['generos'])) {
-        // Si se ha enviado el formulario de actualizacion y no esta vacio.
-        $generos = $_POST['generos'];
-    }
-    if (isset($_POST['mobyScore']) && !empty($_POST['mobyScore'])) {
-        // Si se ha enviado el formulario de actualizacion y no esta vacio.
-        $urlJuego = $_POST['mobyScore'];
-    }
-
-    if (isset($_POST['descripcion']) && !empty($_POST['descripcion'])) {
-        // Si se ha enviado el formulario de actualizacion y no esta vacio.
-        $discripcion=$_POST['descripcion'];
-    }
-
-    if (isset($_POST['urlImagen']) && !empty($_POST['urlImagen'])) {
-        // Si se ha enviado el formulario de actualizacion y no esta vacio.
-        $urlImagen = $_POST['urlImagen'];
-    }
-
-    if (isset($_POST['fichero']) && !empty($_POST['fichero'])){
-        echo "Estoy recibiendo el fichero subido zip"; // Confirmamos que ha entrado.
-
-        $archivoZip = $_FILES['archivo_zip']['tmp_name']; // Asignamos el fichero a una variable
-        //Ahora debemos guardar ek fichero en un directorio 
-        $destino = "archivo_extraido/".$_FILES['archivo_zip']['name']; 
-        if (!is_dir("archivo_extraido")) {
-            mkdir("archivo_extraido", 0777, true);
-        }
-        $guardado = move_uploaded_file($_FILES['archivo_zip']['tmp_name'], $destino);
-
-        if ($guardado) {
-            echo "El archivo se subió correctamente.";
-        } else {
-            echo "Error al subir el archivo.";
-        }
-
-    }
-
-    
-    $respuesta = Usuariodb::adminInserJuegos($id,$titulo,$desarrollo,$distribuidor,
-        $anos,$urlJuego,$discripcion, $urlImagen );
-    if($respuesta){
-        // Como ha salido bien. Deberia ir directo a la vista de administrador.
-        echo "Ha entrado en el sql correctamente";
+    public function recibirJuegos()
+    {
+        // Aqui iria los datos que recibiria de la parte de juegos.
+        echo 'LOs datos del juego se reciben por aqui';
+        // Aqui recibo los datos de los juegos para darlos de alta
         Vista::muestraAdministrador();
-        exit; // Asegurar que no se ejecute más código
-    }
+        //Vista::muestraCargaJuegos();
+
+        if (isset($_POST['tituloid']) && !empty($_POST['tituloid'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $id = $_POST['tituloid'];
+        }
+
+        if (isset($_POST['tituloJuego']) && !empty($_POST['tituloJuego'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $titulo = $_POST['tituloJuego'];
+        }
+
+        if (isset($_POST['plataformaid']) && !empty($_POST['plataformaid'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $desarrollo = $_POST['plataformaid'];
+        }
+
+        if (isset($_POST['plataforma']) && !empty($_POST['plataforma'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $distribuidor = $_POST['plataforma'];
+        }
+        if (isset($_POST['anios']) && !empty($_POST['anios'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $anos = $_POST['anios'];
+        }
+        if (isset($_POST['generos']) && !empty($_POST['generos'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $generos = $_POST['generos'];
+        }
+        if (isset($_POST['mobyScore']) && !empty($_POST['mobyScore'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $urlJuego = $_POST['mobyScore'];
+        }
+
+        if (isset($_POST['descripcion']) && !empty($_POST['descripcion'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $discripcion = $_POST['descripcion'];
+        }
+
+        if (isset($_POST['urlImagen']) && !empty($_POST['urlImagen'])) {
+            // Si se ha enviado el formulario de actualizacion y no esta vacio.
+            $urlImagen = $_POST['urlImagen'];
+        }
+
+        if (isset($_POST['fichero']) && !empty($_POST['fichero'])) {
+            echo "Estoy recibiendo el fichero subido zip"; // Confirmamos que ha entrado.
+
+            $archivoZip = $_FILES['archivo_zip']['tmp_name']; // Asignamos el fichero a una variable
+            //Ahora debemos guardar ek fichero en un directorio 
+            $destino = "archivo_extraido/" . $_FILES['archivo_zip']['name'];
+            if (!is_dir("archivo_extraido")) {
+                mkdir("archivo_extraido", 0777, true);
+            }
+            $guardado = move_uploaded_file($_FILES['archivo_zip']['tmp_name'], $destino);
+
+            if ($guardado) {
+                echo "El archivo se subió correctamente.";
+            } else {
+                echo "Error al subir el archivo.";
+            }
+
+        }
+
+
+        $respuesta = Usuariodb::adminInserJuegos(
+            $id,
+            $titulo,
+            $desarrollo,
+            $distribuidor,
+            $anos,
+            $urlJuego,
+            $discripcion,
+            $urlImagen
+        );
+        if ($respuesta) {
+            // Como ha salido bien. Deberia ir directo a la vista de administrador.
+            echo "Ha entrado en el sql correctamente";
+            Vista::muestraAdministrador();
+            exit; // Asegurar que no se ejecute más código
+        }
 
 
     }
@@ -540,6 +549,10 @@ class Controlador{
 
 
 
+    }
+
+    public function muestraValidarTarjeta(){
+        Vista::muestraValidarTarjeta();
     }
 
     public function muestraCatalogo()
@@ -630,9 +643,9 @@ if (isset($_POST['tmp_inicio_btn_entrar_salir'])) {
 if (isset($_POST['tmp_catalogo_btn_entrar_home'])) {
     Vista::muestraHome();
 }
-if (isset($_POST['titulo'])) {
-    $aplicacion->filtrarCatalogo($_POST['titulo']);
-}
+// if (isset($_POST['titulo'])) {
+//     $aplicacion->filtrarCatalogo($_POST['titulo']);
+// }
 if (isset($_POST['tmp_catalago_btn_volcar'])) {
     $aplicacion->volcarCatalago();
 }
@@ -768,114 +781,25 @@ if (isset($_POST['tmp_admin_crearJuegos'])) {
 
 // Este boton es el boton de busqueda del juego.
 
-
-if(isset($_POST['tmp_admin_inyectar_juego'])){
-
-
-if (isset($_POST['tmp_admin_inyectar_juego'])) {
+if (isset($_POST['tmp_admin_buscar_juego_api'])) {
     echo "Boton del juego";
-    $aplicacion->buscarJuego();
+    $aplicacion->buscarJuegoAPI();
+}
+if (isset($_POST['tmp_admin__agregar_juego_vista'])) {
+    echo "Boton del juego";
+    $aplicacion->muestraAgregarJuegoAPI();
 }
 
 
 // Este boton sera para recepcionar los datos de los juegos rellenados
 
-if(isset($_POST['tmp_admin_crearJuegos_apiEjemplo'])){
-    $aplicacion ->recibirJuegos();
+if (isset($_POST['tmp_admin_crearJuegos_apiEjemplo'])) {
+    $aplicacion->recibirJuegos();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+if (isset($_POST['tmp_carrito_btn_comprar'])) {
+    $aplicacion->muestraValidarTarjeta();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

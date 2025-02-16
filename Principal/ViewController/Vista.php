@@ -87,6 +87,11 @@ class Vista
         include_once "../Views/carrito.php";
     }
 
+    public static function muestraValidarTarjeta()
+    {
+        include_once "../tarjetaBancaria/formulario.php";
+    }
+
 
 
 

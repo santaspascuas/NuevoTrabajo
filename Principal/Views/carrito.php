@@ -20,6 +20,11 @@
                 </button>
                 <button type="submit" name="tmp_catalogo_btn_entrar_carrito"><img
                         src="https://www.svgrepo.com/show/477419/shopping-cart-14.svg" width="20rem"></button>
+
+                        
+                <button type="submit" name="tmp_carrito_btn_comprar">
+                    <h1> Comprar</h1>
+                </button>
             </form>
             <div class="search-container">
                 <form action="catalogo.php" method="post">
